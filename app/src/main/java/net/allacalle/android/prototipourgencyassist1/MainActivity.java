@@ -1,6 +1,7 @@
 package net.allacalle.android.prototipourgencyassist1;
 
 
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -44,9 +45,18 @@ public class MainActivity extends ActionBarActivity {
 
             //Cerramos la base de datos
 
-            db.close();
+
+            //Asi le ponemos el nombre a un campo
+            //txtNombre = (TextView)findViewById(R.id.TxtNombre);
+            //txtNombre.setText("Hola caracola ");
+
+            //Vamos a ponerle a un nombre el resultado de un select
+            Cursor c = db.rawQuery(" SELECT codigo,nombre FROM Prueba  ", null);
+            c.moveToFirst();
             txtNombre = (TextView)findViewById(R.id.TxtNombre);
-            txtNombre.setText("Hola caracola ");
+            txtNombre.setText(c.getString(0));
+
+            db.close();
         }
 
     }
