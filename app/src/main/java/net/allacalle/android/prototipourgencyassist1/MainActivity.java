@@ -29,9 +29,11 @@ public class MainActivity extends ActionBarActivity {
 
         //Si hemos abierto correctamente la base de datos
 
+
         if(db != null)
         {
             //Insertamos 5 usuarios de ejemplo
+            /*
             for(int i=1; i<=5; i++)
             {
                 //Generamos los datos
@@ -44,17 +46,42 @@ public class MainActivity extends ActionBarActivity {
             }
 
             //Cerramos la base de datos
+            */
 
 
             //Asi le ponemos el nombre a un campo
             //txtNombre = (TextView)findViewById(R.id.TxtNombre);
             //txtNombre.setText("Hola caracola ");
 
-            //Vamos a ponerle a un nombre el resultado de un select
-            Cursor c = db.rawQuery(" SELECT codigo,nombre FROM Prueba  ", null);
+
+            Cursor c = db.rawQuery(" SELECT  COUNT(*) FROM Formulas  ", null);
             c.moveToFirst();
-            txtNombre = (TextView)findViewById(R.id.TxtNombre);
-            txtNombre.setText(c.getString(0));
+            String nCampos = c.getString(0);
+            //Vamos a ponerle a un nombre el resultado de un select
+            //txtNombre = (TextView)findViewById(R.id.TxtNombre);
+            //txtNombre.setText(nCampos);
+
+            //Comprobamos si la tabla esta vacia. Insertamos solo el listado de formulas
+            // en una tabla vacia.
+
+            //Esta vacio pues insertamos
+            if( nCampos.equals("0") )
+            {
+                db.execSQL("INSERT INTO Formulas (parametrosFormula, tipoFormula, nombreCompleto, abreviatura) VALUES('hola','hola','hola','hola') ");
+                db.execSQL("INSERT INTO Formulas (parametrosFormula, tipoFormula, nombreCompleto, abreviatura) VALUES('hola','hola','hola','hola') ");
+                db.execSQL("INSERT INTO Formulas (parametrosFormula, tipoFormula, nombreCompleto, abreviatura) VALUES('hola','hola','hola','hola') ");
+
+
+                txtNombre = (TextView)findViewById(R.id.TxtNombre);
+                txtNombre.setText("He insertado 3 campos en la base de datos");
+
+            }
+
+            else
+            {
+                txtNombre = (TextView)findViewById(R.id.TxtNombre);
+                txtNombre.setText("No he insertado nada porque no hacia falta");
+            }
 
             db.close();
         }
