@@ -21,6 +21,7 @@ public class FormulasSQLiteHelper extends SQLiteOpenHelper {
         //Se ejecuta la sentencia SQL de creación de la tabla
         db.execSQL(sqlCreateFormula);
         db.execSQL(sqlCreatePrueba);
+        //Este comentario deberia borrarse
     }
 
     @Override
