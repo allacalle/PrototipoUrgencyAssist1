@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class FormulasSQLiteHelper extends SQLiteOpenHelper {
 
     //Sentencia SQL para crear la tabla de Usuarios
-    String sqlCreateFormula = "CREATE TABLE Formulas ( parametrosFormula TEXT, tipoFormula TEXT, nombreCompleto TEXT, abreviatura TEXT)";
+    String sqlCreateFormula = "CREATE TABLE Formulas ( parametrosFormula TEXT, tipoFormula TEXT, nombreCompleto TEXT, abreviatura TEXT, ecuacion TEXT)";
     String sqlCreatePrueba = "CREATE TABLE Prueba (codigo INTEGER , nombre TEXT)";
 
 
