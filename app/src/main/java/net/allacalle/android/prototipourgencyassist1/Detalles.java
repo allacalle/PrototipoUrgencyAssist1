@@ -44,47 +44,12 @@ public class Detalles extends ActionBarActivity {
         //l1.setOrientation(LinearLayout.HORIZONTAL);
 
 
-
-
-        if ( valor.equals("1") ){
-
-            txtDetalles.setText("elegiste 1");
             TextView caja = new TextView(this);
-            caja.setText("Soy una caja de texto molona");
+            caja.setText(valor);
             lm.addView(caja);
 
         }
 
-        else{
-            txtDetalles.setText("elegiste 2");
-            final Button botonazo = new Button(this);
-            botonazo.setText("Pulsame tio!");
-            lm.addView(botonazo);
-
-
-            botonazo.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View arg0) {
-
-                    botonazo.setOnClickListener(new View.OnClickListener() {
-                        public void onClick(View arg0) {
-                            TextView  Mensaje = (TextView)findViewById(R.id.lblMensaje);
-                            String Lista = " Champu, cafe, donuts - donetes ,helado, caramelos";
-                            //Mensaje.setText("Tio me pulsaste!!);
-                            String[] Elementos = Lista.split(",") ;
-                            String[] rebuscado = Elementos[2].split("-");
-                            Mensaje.setText(rebuscado[1]);
-
-
-                        }
-                    });
-                }
-            });
-
-
-        }
-
-
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

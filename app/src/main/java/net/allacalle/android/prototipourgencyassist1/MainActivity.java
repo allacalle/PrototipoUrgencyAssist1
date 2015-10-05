@@ -1,12 +1,16 @@
 package net.allacalle.android.prototipourgencyassist1;
 
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 
@@ -20,6 +24,9 @@ public class MainActivity extends ActionBarActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //creamos el layout dinamico como pros!
+        final LinearLayout lm = (LinearLayout) findViewById(R.id.LytContenedor);
 
         //Abrimos la base de datos 'DBUsuarios' en modo escritura
         FormulasSQLiteHelper usdbh =
@@ -85,6 +92,41 @@ public class MainActivity extends ActionBarActivity {
                 txtNombre.setText("No he insertado nada porque no hacia falta");
             }
 
+
+
+
+            //Leemos las formulas insertadas en la base de datos y cogemos las abreviaturas.
+            Cursor abreviatura = db.rawQuery(" SELECT  abreviatura FROM Formulas  ", null);
+            Button botonazo = new Button(this);
+            abreviatura.moveToFirst();
+            final String Nombreabreviatura = abreviatura.getString(0);
+            botonazo.setText(Nombreabreviatura);
+            lm.addView(botonazo);
+
+
+            botonazo.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //Creamos el Intent
+                    Intent intent =
+                            new Intent(MainActivity.this, Detalles.class);
+
+                    //Creamos la información a pasar entre actividades
+                    Bundle b = new Bundle();
+                    b.putString("NOMBRE", Nombreabreviatura);
+
+                    //Añadimos la información al intent
+                    intent.putExtras(b);
+
+                    //Iniciamos la nueva actividad
+                    startActivity(intent);
+                }
+            });
+            
+
+
+            abreviatura.close();
+            c.close();
             db.close();
         }
 
