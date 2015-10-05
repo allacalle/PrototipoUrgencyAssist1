@@ -48,6 +48,15 @@ public class Detalles extends ActionBarActivity {
             caja.setText(valor);
             lm.addView(caja);
 
+
+        //Abro la base de datos.
+        FormulasSQLiteHelper usdbh =
+                new FormulasSQLiteHelper(this, "DBPrueba", null, 1);
+
+
+
+
+
         }
 
 

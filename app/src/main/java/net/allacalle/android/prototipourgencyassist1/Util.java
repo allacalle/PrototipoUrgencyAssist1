@@ -28,6 +28,15 @@ public final  class Util
         return listaParametros;
     }
 
+    public static  int ContarParametros (String consulta  )
+    {
+
+        String [] listaParametros = consulta.split(";");
+        return listaParametros.length;
+    }
+
+
+
     public static BigDecimal  calcularEcuacion (String ecuacion )
     {
         BigDecimal resultado;
