@@ -75,7 +75,7 @@ public class MainActivity extends ActionBarActivity {
             //Esta vacio pues insertamos
             if( nCampos.equals("0") )
             {
-                db.execSQL("INSERT INTO Formulas (parametrosFormula,tipoFormula,nombreCompleto,abreviatura)  VALUES (' Alb[< 2.8:3, intervalo:2,>3.5:1];Bili[< 2:1, intervalo:2,>3:3]; TP[< 4:1, intervalo:2,>6:3];  INR[< 1.7:1, intervalo:2,>2.3:3]', 'score','Child- Pugh (con birumina total no colestatica)','Child- Pugh ');");
+                db.execSQL("INSERT INTO Formulas (parametrosFormula,tipoFormula,nombreCompleto,abreviatura)  VALUES (' Alb[< 2.8:3, intervalo:2,>3.5:1];Bili[< 2:1, intervalo:2,>3:3]; TP[< 4:1, intervalo:2,>6:3];  INR[< 1.7:1, intervalo:2,>2.3:3]', 'score','Child- Pugh (con birumina total no colestatica)','Child- Pugh');");
                 db.execSQL("INSERT INTO Formulas (parametrosFormula,tipoFormula,nombreCompleto,abreviatura,ecuacion)  VALUES (' FC; edad; PS', 'ecuacion','TIMI con indice de riesgo','TIMI', '(FC*(edad/10)^2)/PS ' );");
 
                 //db.execSQL("INSERT INTO Formulas (parametrosFormula, tipoFormula, nombreCompleto, abreviatura) VALUES('hola','hola','hola','hola') ");

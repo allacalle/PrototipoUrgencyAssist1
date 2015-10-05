@@ -1,6 +1,8 @@
 package net.allacalle.android.prototipourgencyassist1;
 
 
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -43,17 +45,34 @@ public class Detalles extends ActionBarActivity {
         //LinearLayout l1 = new LinearLayout(this);
         //l1.setOrientation(LinearLayout.HORIZONTAL);
 
-
-            TextView caja = new TextView(this);
-            caja.setText(valor);
-            lm.addView(caja);
+        String cadenaCompleta ="";
 
 
         //Abro la base de datos.
         FormulasSQLiteHelper usdbh =
                 new FormulasSQLiteHelper(this, "DBPrueba", null, 1);
 
+        SQLiteDatabase db = usdbh.getReadableDatabase();
+        Cursor c = db.rawQuery("SELECT parametrosFormula FROM Formulas  WHERE abreviatura = '"+valor+"'  ", null);
+        c.moveToFirst();
+        cadenaCompleta = c.getString(0);
 
+        TextView caja = new TextView(this);
+        caja.setText(cadenaCompleta);
+        lm.addView(caja);
+
+        int numeroParametros = Util.ContarParametros(cadenaCompleta);
+
+
+        /*
+        for(int i=0;i< numeroParametros; i++)
+        {
+
+        }
+        */
+
+        db.close();
+        c.close();
 
 
 
