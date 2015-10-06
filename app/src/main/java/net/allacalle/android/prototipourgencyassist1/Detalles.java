@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -57,19 +58,30 @@ public class Detalles extends ActionBarActivity {
         c.moveToFirst();
         cadenaCompleta = c.getString(0);
 
+
         TextView caja = new TextView(this);
         caja.setText(cadenaCompleta);
         lm.addView(caja);
 
+
         int numeroParametros = Util.ContarParametros(cadenaCompleta);
+        String [] parametrosOriginal  = Util.ListaParametros(cadenaCompleta);
+        String [] parametrosFiltrados = Util.getParametrosDeScore(parametrosOriginal);
+        //String [] ListaScore = Util.crearListaScoreTipoA(parametrosOriginal);
 
 
-        /*
         for(int i=0;i< numeroParametros; i++)
         {
-
+            TextView label = new TextView(this);
+            label.setId(i);
+            label.setText(parametrosFiltrados[i]);
+            EditText escribe = new EditText(this);
+            escribe.setId(i + 1);
+            escribe.setText("Pon algo");
+            lm.addView(label);
+            lm.addView(escribe);
         }
-        */
+
 
         db.close();
         c.close();

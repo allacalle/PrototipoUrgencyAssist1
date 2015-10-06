@@ -10,9 +10,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.math.BigDecimal;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -77,6 +79,10 @@ public class MainActivity extends ActionBarActivity {
             {
                 db.execSQL("INSERT INTO Formulas (parametrosFormula,tipoFormula,nombreCompleto,abreviatura)  VALUES (' Alb[< 2.8:3, intervalo:2,>3.5:1];Bili[< 2:1, intervalo:2,>3:3]; TP[< 4:1, intervalo:2,>6:3];  INR[< 1.7:1, intervalo:2,>2.3:3]', 'score','Child- Pugh (con birumina total no colestatica)','Child- Pugh');");
                 db.execSQL("INSERT INTO Formulas (parametrosFormula,tipoFormula,nombreCompleto,abreviatura,ecuacion)  VALUES (' FC; edad; PS', 'ecuacion','TIMI con indice de riesgo','TIMI', '(FC*(edad/10)^2)/PS ' );");
+                db.execSQL("INSERT INTO Formulas (parametrosFormula,tipoFormula,nombreCompleto,abreviatura)  VALUES (' edad[>55:1];Leucos[>15:1];gluc[>180:1];LDH[>600:3];Alb[<3.2:1];Ca++[<8:1];PaO2[<60:1];SUN[>45:1]  ', 'score','Glasgow criterios para pancreatitis','Glasgow pancreatitis');");
+                db.execSQL("INSERT INTO Formulas (parametrosFormula,tipoFormula,nombreCompleto,abreviatura)  VALUES (' Ojos(apertura) [espontanea:4, por indicación:3, estimulo doloroso:2, no respuesta:1 ] ; Verbal (mejor) [orientado:5, confuso:4, palabras inapropiadas:3, incomprensible:2, no respuesta:1 ] ; Motor(mejor)[obedece indicaciones:6, localiza dolor:5, retira el dolor:4, flexion anormal:3, extension:2, no respuesta:1] ', 'score','Glasgow, Escala de Coma','Glasgow coma');");
+
+
 
                 //db.execSQL("INSERT INTO Formulas (parametrosFormula, tipoFormula, nombreCompleto, abreviatura) VALUES('hola','hola','hola','hola') ");
 
@@ -98,30 +104,58 @@ public class MainActivity extends ActionBarActivity {
             //Leemos las formulas insertadas en la base de datos y cogemos las abreviaturas.
             Cursor abreviatura = db.rawQuery(" SELECT  abreviatura FROM Formulas  ", null);
             Button botonazo = new Button(this);
+            int numeroFormulas;
+            numeroFormulas = abreviatura.getCount();
             abreviatura.moveToFirst();
+
+
+
             final String Nombreabreviatura = abreviatura.getString(0);
-            botonazo.setText(Nombreabreviatura);
+            //Expression expression = new Expression("4 <= 5  &&  3 <= 4 ");
+            //Utilizar esta expresion para convertir intervalo (1,4) a  X <= 4 && 1 <= X donde X es el valor del parametro actual.
+            //BigDecimal resultado;
+            //resultado = expression.eval();
+
+            botonazo.setText(" Hay  " + numeroFormulas + " formulas ");
             lm.addView(botonazo);
 
+            for(int i=0;i< numeroFormulas; i++)
+            {
+                final Button boton = new Button(this);
+                boton.setId(i);
 
-            botonazo.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //Creamos el Intent
-                    Intent intent =
-                            new Intent(MainActivity.this, Detalles.class);
+                if (i == 0)
+                    abreviatura.moveToFirst();
+                else
+                    abreviatura.moveToNext();
 
-                    //Creamos la información a pasar entre actividades
-                    Bundle b = new Bundle();
-                    b.putString("NOMBRE", Nombreabreviatura);
+                boton.setText(abreviatura.getString(0));
+                lm.addView(boton);
 
-                    //Añadimos la información al intent
-                    intent.putExtras(b);
+                boton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //Creamos el Intent
+                        Intent intent =
+                                new Intent(MainActivity.this, Detalles.class);
 
-                    //Iniciamos la nueva actividad
-                    startActivity(intent);
-                }
-            });
+                        //Creamos la información a pasar entre actividades
+                        Bundle b = new Bundle();
+                        b.putString("NOMBRE", (String) boton.getText());
+
+                        //Añadimos la información al intent
+                        intent.putExtras(b);
+
+                        //Iniciamos la nueva actividad
+                        startActivity(intent);
+                    }
+                });
+
+
+            }
+
+
+
 
 
 

@@ -102,9 +102,34 @@ public final  class Util
 
     }
 
+    //Esta funcion recibe una lista con los parametros perteneciente a una formula tipo Score.
+    //Devuelve False para tipo Score A y devuelve True para tipo Score B.
+
+    public static boolean SoyScoreB (String [] listaParametros )
+    {
+        for(int i=0;i< listaParametros.length;i++)
+        {
+            for(int j=0;j < listaParametros[i].length();j++)
+            {
+                if (listaParametros[i].charAt(j) == '>'  || listaParametros[i].charAt(j) == '<' )
+                {
+                    //Obtenemos la posicion donde se encontra el corchete
+                    return  true;
+                }
+            }
+        }
+        return  false;
+    }
+
 
 
     //Crea un array con la siguiente estrucutura [nombreParametro,condicion1,condicion2,condicion3, nombreParametro...]
+
+    //El tipo A se refiere al parametro asi que no tiene sentido llamar a una lista tipo A o tipo B, ya que el Score puede tener ambos a la vez.
+
+
+    /*
+
     public static String [] crearListaScoreTipoA (String [] listaParametros )
     {
         String [] parametroDeScore = getParametrosDeScore(listaParametros);
@@ -116,7 +141,7 @@ public final  class Util
         for(int i=0;i< listaParametros.length;i++)
         {
 
-            String [] condicion ;
+            String [] condicion ;g
 
             arrayFinalScore[j]= parametroDeScore[i];
             j++;
@@ -163,6 +188,8 @@ public final  class Util
 
         return arrayFinalScore;
     }
+
+/*
 
 
 
