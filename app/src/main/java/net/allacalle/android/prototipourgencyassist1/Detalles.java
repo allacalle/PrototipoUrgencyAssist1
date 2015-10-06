@@ -47,6 +47,9 @@ public class Detalles extends ActionBarActivity {
         //l1.setOrientation(LinearLayout.HORIZONTAL);
 
         String cadenaCompleta ="";
+        //String tipoDeFormula = "";
+
+        // Para obtener el tipo de cada formula deberiamos movernos al cursor de cada formula y obtener el getString(1);
 
 
         //Abro la base de datos.
@@ -54,14 +57,71 @@ public class Detalles extends ActionBarActivity {
                 new FormulasSQLiteHelper(this, "DBPrueba", null, 1);
 
         SQLiteDatabase db = usdbh.getReadableDatabase();
-        Cursor c = db.rawQuery("SELECT parametrosFormula FROM Formulas  WHERE abreviatura = '"+valor+"'  ", null);
+
+        //creamos un cursos, en el string(0) tenemos el parametro, en el string(1) tenemos el tipo de formula
+        Cursor c = db.rawQuery("SELECT parametrosFormula ,tipoFormula FROM Formulas  WHERE abreviatura = '"+valor+"'  ", null);
         c.moveToFirst();
         cadenaCompleta = c.getString(0);
+
 
 
         TextView caja = new TextView(this);
         caja.setText(cadenaCompleta);
         lm.addView(caja);
+
+
+        /*
+
+        Averiguar si es tipo ecuacion o tipo score la Formula.
+        Si es tipo Ecuacion
+        Mostrar el nombre de todos los parametros y crear una caja de texto para introducir un valor
+        crear un boton abajo que al pulsarlo ejecute la formula con los valores introducidos
+        Solo se ejecuta la ecuación si estan todos los parametros
+
+        Si es Score
+        Se debe evaluar cada para independientemente.
+        Si el paramatro es de tipo A
+            Se crea un boton radial con cada una de las opciones (Se debe almacenar en alguna variable
+            los distintos valores de puntuación para cada opcion elegible.
+
+       Si el parametro es de tipo B
+            Si el parametro es de tipo B incompleto
+                Se crea una caja de texto para el parametro (se debe almacenar la cadena con la condicion y la puntuacion de esta)
+            Si el parametro es de tipo B completo
+                Se cambia el formato por defecto parametro[< num1:puntuacion1, intervalo:puntuacion2;>num2:puntuacion3]
+                 para que quede de la foma.
+                    x < num 1 -> Puntuacion1
+                    x <= num2 && num1 <= x -> Puntuacion2
+                    x > num2 --> Puntuacion3
+                Se crea una caja de texto para el parametro (se debe almacenar en alguna variable )
+
+          Si la formula es tipo Ecuacion.
+          Se crea un boton cuyo nombre es calcular formula.
+          Al pulsar el boton.
+
+          Se deben agregar los valores introducidos en los campos de texto a la expression de la formula. Para ello se utiliza sobre la
+          expression las funciones with() y and(). Una vez introducidos todos se utiliza la funciona eval() y esta devuelve un resultado.
+
+
+          Si la formula es de tipo Score
+            Si el parametro es de tipo A
+                Se obtiene la puntuacion asignada a la condicion seleccionada.
+
+            Si el parametro es de tipo B
+                Si es B incompleto
+                    Se obtiene la puntuacion evaluando si el numero introducido cumple la condicion o no; si la cumple suma el
+                    valor de puntuacion, sino no suma nada.
+
+                Si es B completo
+                    Se obtiene la puntuacion evaluando cada una de las condiciones, dependiendo de cual cumpla obtendra una puntuacion.
+
+
+
+
+
+
+
+        */
 
 
         int numeroParametros = Util.ContarParametros(cadenaCompleta);
