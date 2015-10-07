@@ -116,7 +116,8 @@ public class MainActivity extends ActionBarActivity {
             //BigDecimal resultado;
             //resultado = expression.eval();
 
-            botonazo.setText(" Hay  " + numeroFormulas + " formulas ");
+            //botonazo.setText(" Hay  " + numeroFormulas + " formulas ");
+            botonazo.setText(Util.tipoScore("Alb"));
             lm.addView(botonazo);
 
             for(int i=0;i< numeroFormulas; i++)
@@ -153,11 +154,6 @@ public class MainActivity extends ActionBarActivity {
 
 
             }
-
-
-
-
-
 
 
             abreviatura.close();

@@ -61,13 +61,19 @@ public class Detalles extends ActionBarActivity {
         //creamos un cursos, en el string(0) tenemos el parametro, en el string(1) tenemos el tipo de formula
         Cursor c = db.rawQuery("SELECT parametrosFormula ,tipoFormula FROM Formulas  WHERE abreviatura = '"+valor+"'  ", null);
         c.moveToFirst();
+        //Cogemos la lista de parametros de esa formula
         cadenaCompleta = c.getString(0);
+        //Primero cogemos el tipo de formula para saber si es Ecuación o Score
+        String tipoDeFormula = c.getString(1);
 
 
 
         TextView caja = new TextView(this);
-        caja.setText(cadenaCompleta);
+        caja.setText(" Esta es la cadena  "+ cadenaCompleta+ " Y su formula es de tipo"  + tipoDeFormula+" "  );
         lm.addView(caja);
+
+
+
 
 
         /*
@@ -123,23 +129,51 @@ public class Detalles extends ActionBarActivity {
 
         */
 
-
-        int numeroParametros = Util.ContarParametros(cadenaCompleta);
-        String [] parametrosOriginal  = Util.ListaParametros(cadenaCompleta);
-        String [] parametrosFiltrados = Util.getParametrosDeScore(parametrosOriginal);
-        //String [] ListaScore = Util.crearListaScoreTipoA(parametrosOriginal);
-
-
-        for(int i=0;i< numeroParametros; i++)
+        //Evaluamos si el tipo de la formula es Score.
+        if (tipoDeFormula.equals("score"))
         {
-            TextView label = new TextView(this);
-            label.setId(i);
-            label.setText(parametrosFiltrados[i]);
-            EditText escribe = new EditText(this);
-            escribe.setId(i + 1);
-            escribe.setText("Pon algo");
-            lm.addView(label);
-            lm.addView(escribe);
+            int numeroParametros = Util.ContarParametros(cadenaCompleta);
+            String [] parametrosOriginal  = Util.ListaParametros(cadenaCompleta);
+            String [] parametrosFiltrados = Util.getParametrosDeScore(parametrosOriginal);
+            //String [] ListaScore = Util.crearListaScoreTipoA(parametrosOriginal);
+
+
+            for(int i=0;i< numeroParametros; i++)
+            {
+                //Para cada parametro debemos evaluar si es ScoreA , ScoreBIncompleto o ScoreBCompleto
+
+                TextView label = new TextView(this);
+                label.setText(parametrosFiltrados[i]);
+                EditText escribe = new EditText(this);
+                escribe.setId(i);
+                escribe.setText("Pon algo");
+                lm.addView(label);
+                lm.addView(escribe);
+            }
+
+        }
+        //Sino es Score tendra que ser de tipo ecuacion.
+        else
+        {
+            int numeroParametros = Util.ContarParametros(cadenaCompleta);
+            String [] parametros  = Util.ListaParametros(cadenaCompleta);
+
+            for(int i=0;i< numeroParametros; i++)
+            {
+
+                //Si el parametro es ScoreA
+
+
+                //Si el parametro es ScoreBIncompleto o ScoreBCompleto
+                TextView label = new TextView(this);
+                label.setText(parametros[i]);
+                EditText escribe = new EditText(this);
+                escribe.setId(i);
+                escribe.setText("Pon algo");
+                lm.addView(label);
+                lm.addView(escribe);
+            }
+
         }
 
 
