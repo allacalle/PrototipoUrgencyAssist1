@@ -141,7 +141,47 @@ public final  class Util
         return listaParametros.length;
     }
 
+    public static String [] listaPuntuacionScore (String parametro)
+    {
+        String parametroFiltrado;
 
+
+        //primero necesito filtrar el parametro eliminando "nombreParametro["   y "]"
+        parametroFiltrado =  filtrarParametro(parametro);
+
+        //Meter todos estos valores en un array
+        String [] condicionPuntuacion = parametroFiltrado.split(",");
+
+        return condicionPuntuacion;
+    }
+
+    public static String filtrarParametro (String Parametro)
+    {
+        //Esta funcion debe eliminar los corchetes y el nombre del parametro de un parametro de tipo Score
+        int posicionInicial =0;
+        int posicionFinal =0;
+        String parametroFiltrado;
+
+        for(int i=0;i < Parametro.length();i++)
+        {
+            if ( Parametro.charAt(i) == ']')
+            {
+                //Obtenemos la posicion donde se encontra el corchete
+                posicionFinal = i;
+            }
+
+            if (Parametro.charAt(i) == '[')
+            {
+                //Obtenemos la posicion donde se encontra el corchete
+                posicionInicial = i +1;
+            }
+        }
+
+        parametroFiltrado =  Parametro.substring(posicionInicial, posicionFinal);
+
+        return parametroFiltrado;
+
+    }
 
 
 
@@ -163,7 +203,7 @@ public final  class Util
         for(int i=0;i< listaParametros.length;i++)
         {
 
-            String [] condicion ;g
+            String [] condicion ;
 
             arrayFinalScore[j]= parametroDeScore[i];
             j++;
@@ -210,14 +250,6 @@ public final  class Util
 
         return arrayFinalScore;
     }
-
-/*
-
-
-
-
-
-
 
 
     /*

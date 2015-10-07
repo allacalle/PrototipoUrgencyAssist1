@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 
@@ -151,11 +152,23 @@ public class Detalles extends ActionBarActivity {
                 {
                     TextView label = new TextView(this);
                     label.setText("" +parametrosFiltrados[i]+ " es " +tipoDeScore+  "" );
+                    lm.addView(label);
                     //Contamos el numero de valores que tiene ese parametro
                     numeroScores = Util.ContarScores(parametrosOriginal[i]);
-                    RadioButton radial = new RadioButton(this);
-                    lm.addView(radial);
-                    lm.addView(label);
+
+                    RadioGroup grupo = new RadioGroup(this);
+                    String listaCondicionPuntuacion [] =  Util.listaPuntuacionScore(parametrosOriginal[i]);
+
+                    for(int j=0;j< numeroScores; j++)
+                    {
+                        RadioButton radial = new RadioButton(this);
+                        radial.setText(listaCondicionPuntuacion[j]);
+                        radial.setId((i + 1) * (j + 1));
+                        grupo.addView(radial);
+                    }
+
+                    lm.addView(grupo);
+
 
                 }
 
