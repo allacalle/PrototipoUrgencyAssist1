@@ -134,6 +134,14 @@ public final  class Util
     }
 
 
+    public static  int ContarScores (String parametroFiltrado  )
+    {
+
+        String [] listaParametros = parametroFiltrado.split(",");
+        return listaParametros.length;
+    }
+
+
 
 
 

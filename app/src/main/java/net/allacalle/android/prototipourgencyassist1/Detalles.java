@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 
@@ -67,10 +68,10 @@ public class Detalles extends ActionBarActivity {
         String tipoDeFormula = c.getString(1);
 
 
-
-        TextView caja = new TextView(this);
-        caja.setText(" Esta es la cadena  "+ cadenaCompleta+ " Y su formula es de tipo"  + tipoDeFormula+" "  );
-        lm.addView(caja);
+        //Comprobacion de que coje la lista de parametros y el tipo de formula
+        //TextView caja = new TextView(this);
+        //caja.setText(" Esta es la cadena  "+ cadenaCompleta+ " Y su formula es de tipo"  + tipoDeFormula+" "  );
+        //lm.addView(caja);
 
 
 
@@ -141,14 +142,37 @@ public class Detalles extends ActionBarActivity {
             for(int i=0;i< numeroParametros; i++)
             {
                 //Para cada parametro debemos evaluar si es ScoreA , ScoreBIncompleto o ScoreBCompleto
+                String tipoDeScore;
+                tipoDeScore = Util.tipoScore(parametrosOriginal[i]);
+                int numeroScores;
 
-                TextView label = new TextView(this);
-                label.setText(parametrosFiltrados[i]);
-                EditText escribe = new EditText(this);
-                escribe.setId(i);
-                escribe.setText("Pon algo");
-                lm.addView(label);
-                lm.addView(escribe);
+                // Si es ScoreA
+                if (tipoDeScore.equals("ScoreA"))
+                {
+                    TextView label = new TextView(this);
+                    label.setText("" +parametrosFiltrados[i]+ " es " +tipoDeScore+  "" );
+                    //Contamos el numero de valores que tiene ese parametro
+                    numeroScores = Util.ContarScores(parametrosOriginal[i]);
+                    RadioButton radial = new RadioButton(this);
+                    lm.addView(radial);
+                    lm.addView(label);
+
+                }
+
+
+
+                //Si es ScoreB
+                else if (tipoDeScore.equals("ScoreBIncompleto")  || tipoDeScore.equals("ScoreBCompleto")  )
+                {
+                    TextView label = new TextView(this);
+                    label.setText(parametrosFiltrados[i]);
+                    EditText escribe = new EditText(this);
+                    escribe.setId(i);
+                    escribe.setText("Pon algo");
+                    lm.addView(label);
+                    lm.addView(escribe);
+                }
+
             }
 
         }
@@ -160,11 +184,6 @@ public class Detalles extends ActionBarActivity {
 
             for(int i=0;i< numeroParametros; i++)
             {
-
-                //Si el parametro es ScoreA
-
-
-                //Si el parametro es ScoreBIncompleto o ScoreBCompleto
                 TextView label = new TextView(this);
                 label.setText(parametros[i]);
                 EditText escribe = new EditText(this);

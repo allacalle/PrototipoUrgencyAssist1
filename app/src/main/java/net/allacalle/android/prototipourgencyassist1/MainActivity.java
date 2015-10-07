@@ -81,6 +81,7 @@ public class MainActivity extends ActionBarActivity {
                 db.execSQL("INSERT INTO Formulas (parametrosFormula,tipoFormula,nombreCompleto,abreviatura,ecuacion)  VALUES (' FC; edad; PS', 'ecuacion','TIMI con indice de riesgo','TIMI', '(FC*(edad/10)^2)/PS ' );");
                 db.execSQL("INSERT INTO Formulas (parametrosFormula,tipoFormula,nombreCompleto,abreviatura)  VALUES (' edad[>55:1];Leucos[>15:1];gluc[>180:1];LDH[>600:3];Alb[<3.2:1];Ca++[<8:1];PaO2[<60:1];SUN[>45:1]  ', 'score','Glasgow criterios para pancreatitis','Glasgow pancreatitis');");
                 db.execSQL("INSERT INTO Formulas (parametrosFormula,tipoFormula,nombreCompleto,abreviatura)  VALUES (' Ojos(apertura) [espontanea:4, por indicación:3, estimulo doloroso:2, no respuesta:1 ] ; Verbal (mejor) [orientado:5, confuso:4, palabras inapropiadas:3, incomprensible:2, no respuesta:1 ] ; Motor(mejor)[obedece indicaciones:6, localiza dolor:5, retira el dolor:4, flexion anormal:3, extension:2, no respuesta:1] ', 'score','Glasgow, Escala de Coma','Glasgow coma');");
+                db.execSQL("INSERT INTO Formulas (parametrosFormula,tipoFormula,nombreCompleto,abreviatura)  VALUES ('edad [< 65:0, intervalo:1,> 74:2 ] ; sexo[hombre:0, mujer:1]; insuficiencia cardiaca[si:1, no:0]; hipertension[si:1,no:0];AVC[si:1, no:0];AIT[si:1,no:0];TEV[si:1, no:0];enfermedad vascular[si:1,no:0]; diabetes mellitus[si:1,no:0]', 'score','Escala de riesgo de AVC por fibriliacion atrial','CHAD2DS2-VASc');");
 
 
 
