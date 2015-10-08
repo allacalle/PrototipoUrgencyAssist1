@@ -1,6 +1,7 @@
 package net.allacalle.android.prototipourgencyassist1;
 
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.ActionBarActivity;
@@ -14,6 +15,9 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class Detalles extends ActionBarActivity {
@@ -137,6 +141,9 @@ public class Detalles extends ActionBarActivity {
             int numeroParametros = Util.ContarParametros(cadenaCompleta);
             String [] parametrosOriginal  = Util.ListaParametros(cadenaCompleta);
             String [] parametrosFiltrados = Util.getParametrosDeScore(parametrosOriginal);
+
+            //Se crea un array para ver de que tipo es cada parametro. ScoreA, ScoreB
+            String [] tipoParametro = new String[numeroParametros];
             //String [] ListaScore = Util.crearListaScoreTipoA(parametrosOriginal);
 
 
@@ -145,6 +152,9 @@ public class Detalles extends ActionBarActivity {
                 //Para cada parametro debemos evaluar si es ScoreA , ScoreBIncompleto o ScoreBCompleto
                 String tipoDeScore;
                 tipoDeScore = Util.tipoScore(parametrosOriginal[i]);
+
+                //Guardamos el tipo de cada parametro en un array
+                tipoParametro[i] = Util.tipoScore(parametrosOriginal[i]);
                 int numeroScores;
 
                 // Si es ScoreA
@@ -181,30 +191,95 @@ public class Detalles extends ActionBarActivity {
                     label.setText(parametrosFiltrados[i]);
                     EditText escribe = new EditText(this);
                     escribe.setId(i);
-                    escribe.setText("Pon algo");
+                    escribe.setText(" ");
                     lm.addView(label);
                     lm.addView(escribe);
                 }
 
             }
 
+            //final TextView lblEtiqueta = (TextView)findViewById(lm. );
+            //String texto = lblEtiqueta.getText().toString();
+
         }
         //Sino es Score tendra que ser de tipo ecuacion.
         else
         {
+
+            /*
+            Ejemplo de como crear un editText dinamico y leerlo despues
+
+
+            final Button botonazo = new Button(this);
+            botonazo.setText("Pulsame tio!");
+            lm.addView(botonazo);
+            EditText ed;
+            final List<EditText> allEds = new ArrayList<EditText>();
+
+            for (int i = 0; i < 5; i++) {
+
+                ed = new EditText(this);
+                allEds.add(ed);
+                ed.setId(i);
+                lm.addView(ed);
+            }
+
+              botonazo.setOnClickListener(new View.OnClickListener() {
+                        public void onClick(View arg0) {
+                          TextView  Mensaje = (TextView)findViewById(R.id.lblMensaje);
+                            String cadena="";
+                            String[] string = new String[allEds.size() ];
+
+                            for(int i=0; i < allEds.size(); i++){
+                                string[i] = allEds.get(i).getText().toString();
+                                cadena = cadena + string[i];
+                            }
+
+             Mensaje.setText(cadena );
+             */
+
+            //Creamos un array de EditText utilizando List y ArrayList
+            EditText ed;
+            final List<EditText> allEds = new ArrayList<EditText>();
+
             int numeroParametros = Util.ContarParametros(cadenaCompleta);
             String [] parametros  = Util.ListaParametros(cadenaCompleta);
+
+
 
             for(int i=0;i< numeroParametros; i++)
             {
                 TextView label = new TextView(this);
                 label.setText(parametros[i]);
-                EditText escribe = new EditText(this);
-                escribe.setId(i);
-                escribe.setText("Pon algo");
+                ed = new EditText(this);
+                allEds.add(ed);
+                ed.setId(i);
                 lm.addView(label);
-                lm.addView(escribe);
+                lm.addView(ed);
             }
+
+            final String[] string = new String[allEds.size()];
+            final Button botonEcuacion = new Button(this);
+            botonEcuacion.setText("Calcular formula");
+            lm.addView(botonEcuacion);
+            final TextView mensaje = new TextView(this);
+            lm.addView(mensaje);
+
+
+            botonEcuacion.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    String cadena="";
+                    for (int i = 0; i < allEds.size(); i++) {
+                        string[i] = allEds.get(i).getText().toString();
+                        cadena = cadena + string[i];
+                    }
+
+                    mensaje.setText(cadena);
+                }
+            });
+
 
         }
 
