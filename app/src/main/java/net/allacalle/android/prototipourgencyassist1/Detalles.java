@@ -16,6 +16,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,7 +38,7 @@ public class Detalles extends ActionBarActivity {
 
         //Construimos el mensaje a mostrar
         //txtDetalles.setText("Elegiste la ocpcion " + bundle.getString("NOMBRE"));
-        String valor = bundle.getString("NOMBRE") ;
+        final String valorRecibido = bundle.getString("NOMBRE") ;
 
         //creamos el layout dinamico como pros!
         final LinearLayout lm = (LinearLayout) findViewById(R.id.LytContenedorDetalles);
@@ -65,12 +66,15 @@ public class Detalles extends ActionBarActivity {
         SQLiteDatabase db = usdbh.getReadableDatabase();
 
         //creamos un cursos, en el string(0) tenemos el parametro, en el string(1) tenemos el tipo de formula
-        Cursor c = db.rawQuery("SELECT parametrosFormula ,tipoFormula FROM Formulas  WHERE abreviatura = '"+valor+"'  ", null);
+        Cursor c = db.rawQuery("SELECT parametrosFormula ,tipoFormula,ecuacion FROM Formulas  WHERE abreviatura = '"+valorRecibido+"'  ", null);
         c.moveToFirst();
         //Cogemos la lista de parametros de esa formula
         cadenaCompleta = c.getString(0);
         //Primero cogemos el tipo de formula para saber si es Ecuación o Score
         String tipoDeFormula = c.getString(1);
+
+        //Obtenemos la ecuacion de esa formula si la tiene sino simplemente obtendra null
+        final String ecuacion = c.getString(2);
 
 
         //Comprobacion de que coje la lista de parametros y el tipo de formula
@@ -206,44 +210,11 @@ public class Detalles extends ActionBarActivity {
         else
         {
 
-            /*
-            Ejemplo de como crear un editText dinamico y leerlo despues
-
-
-            final Button botonazo = new Button(this);
-            botonazo.setText("Pulsame tio!");
-            lm.addView(botonazo);
-            EditText ed;
-            final List<EditText> allEds = new ArrayList<EditText>();
-
-            for (int i = 0; i < 5; i++) {
-
-                ed = new EditText(this);
-                allEds.add(ed);
-                ed.setId(i);
-                lm.addView(ed);
-            }
-
-              botonazo.setOnClickListener(new View.OnClickListener() {
-                        public void onClick(View arg0) {
-                          TextView  Mensaje = (TextView)findViewById(R.id.lblMensaje);
-                            String cadena="";
-                            String[] string = new String[allEds.size() ];
-
-                            for(int i=0; i < allEds.size(); i++){
-                                string[i] = allEds.get(i).getText().toString();
-                                cadena = cadena + string[i];
-                            }
-
-             Mensaje.setText(cadena );
-             */
-
             //Creamos un array de EditText utilizando List y ArrayList
             EditText ed;
             final List<EditText> allEds = new ArrayList<EditText>();
-
-            int numeroParametros = Util.ContarParametros(cadenaCompleta);
-            String [] parametros  = Util.ListaParametros(cadenaCompleta);
+            final int numeroParametros = Util.ContarParametros(cadenaCompleta);
+            final String [] parametros  = Util.ListaParametros(cadenaCompleta);
 
 
 
@@ -258,7 +229,7 @@ public class Detalles extends ActionBarActivity {
                 lm.addView(ed);
             }
 
-            final String[] string = new String[allEds.size()];
+            final String[] valorVariable = new String[numeroParametros];
             final Button botonEcuacion = new Button(this);
             botonEcuacion.setText("Calcular formula");
             lm.addView(botonEcuacion);
@@ -270,13 +241,30 @@ public class Detalles extends ActionBarActivity {
                 @Override
                 public void onClick(View v) {
 
+                    Expression expression = new Expression(ecuacion);
                     String cadena="";
-                    for (int i = 0; i < allEds.size(); i++) {
-                        string[i] = allEds.get(i).getText().toString();
-                        cadena = cadena + string[i];
+                    valorVariable[0] = allEds.get(0).getText().toString();
+                    expression.with(parametros[0],valorVariable[0]);
+
+                    for (int i = 1; i < numeroParametros; i++) {
+                        valorVariable[i] = allEds.get(i).getText().toString();
+                        cadena = cadena + "aqui va el parametro"  +parametros[i]+ "aqui su valor" +  valorVariable[i] + "" ;
+                        expression.and(parametros[i], valorVariable[i]);
                     }
 
-                    mensaje.setText(cadena);
+                    //mensaje.setText(cadena + " Y la ecuacion original es" + ecuacion+ "");
+                    BigDecimal resultadoEcuacion  = expression.eval();
+                    mensaje.setText(resultadoEcuacion.toString());
+
+                    /*
+                    String ecuacionprueba ="FC*( (edad/10)^2)/PS" ;
+                    Expression expression = new Expression(ecuacionprueba);
+                    expression.with("FC", "4");
+                    expression.and("edad", "10");
+                    expression.and("PS", "4");
+                    BigDecimal resultado = expression.eval();
+                    mensaje.setText(resultado.toString());
+                    */
                 }
             });
 
