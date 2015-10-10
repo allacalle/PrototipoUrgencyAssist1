@@ -183,6 +183,114 @@ public final  class Util
 
     }
 
+    /*
+
+
+     */
+
+    public static  boolean condicionScoreEsMenor (String parametroFiltrado  )
+{
+    boolean resultado = false;
+
+    for(int i=0;i < parametroFiltrado.length();i++)
+    {
+        if (parametroFiltrado.charAt(i) == '<' )
+        {
+            //Obtenemos la posicion donde se encontra el corchete
+            resultado = true;
+        }
+    }
+
+
+    return resultado;
+}
+
+    public static  boolean condicionScoreEsMayor (String parametroFiltrado  )
+    {
+        boolean resultado = false;
+
+        for(int i=0;i < parametroFiltrado.length();i++)
+        {
+            if (parametroFiltrado.charAt(i) == '>' )
+            {
+                //Obtenemos la posicion donde se encontra el corchete
+                resultado = true;
+            }
+        }
+
+
+        return resultado;
+    }
+
+    //Saca el numero mas pequeño de un intervalo
+
+    public static  int sacarValorMenorIntervalor (String parametroFiltrado  )
+    {
+
+        String [] listaParametros = parametroFiltrado.split(",");
+        return listaParametros.length;
+    }
+
+
+    //Para que esta funcion de un valor acertado debe ser una Formula ScoreBCompleto
+    // <valorMenor:punt,intervalo:punt,>valorMayor:punt
+    public static String sacarValorMenorDeIntervalo (String parametroFiltrado)
+    {
+
+       //Primero tomamos la parte del condicion:score para todo el parametro por ejemplo
+       // <valorMenor:punt,intervalo:punt,>valorMayor:punt
+       String condicionConScore [] =parametroFiltrado.split(",");
+
+        // Tomamos solo la parte de <valorMenor de la cadena  <valorMenor:punt
+       String  condicion [] = condicionConScore[0].split(":");
+        //Tomamos la primera parte <valorMenor
+        String valor = condicion[0];
+        valor = valor.substring(1);
+        //int valorMenor =0;
+       // valorMenor = Integer.parseInt(valor);
+        return  valor;
+
+    }
+
+    //Para que esta funcion de un valor acertado debe ser una Formula ScoreBCompleto
+    // <valorMenor:punt,intervalo:punt,>valorMayor:punt
+
+    public static String sacarValorMayorDeIntervalo (String parametroFiltrado)
+    {
+
+        //Primero tomamos la parte del condicion:score para todo el parametro por ejemplo
+        // <valorMenor:punt,intervalo:punt,>valorMayor:punt
+        String condicionConScore [] =parametroFiltrado.split(",");
+
+        // Tomamos solo la parte de <valorMenor de la cadena  >valorMenor:punt
+        String  condicion [] = condicionConScore[2].split(":");
+        //Tomamos la primera parte >valorMenor
+        String valor = condicion[0];
+        valor = valor.substring(1);
+
+        return  valor;
+
+    }
+
+    //Para que esta funcion de un valor acertado debe ser una Formula ScoreBCompleto
+    // <valorMenor:punt,intervalo:punt,>valorMayor:punt
+    public static String crearFormatoIntervalo (String parametroFiltrado)
+    {
+
+        String valorMenor = sacarValorMenorDeIntervalo(parametroFiltrado);
+        String valorMayor = sacarValorMayorDeIntervalo(parametroFiltrado);
+
+        String resultado = "<= " +valorMayor+ " && " +valorMenor+ " <=" ;
+
+        return resultado;
+
+    }
+
+
+
+
+
+
 
 
     //Crea un array con la siguiente estrucutura [nombreParametro,condicion1,condicion2,condicion3, nombreParametro...]

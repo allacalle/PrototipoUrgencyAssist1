@@ -84,8 +84,6 @@ public class Detalles extends ActionBarActivity {
 
 
 
-
-
         /*
 
         Averiguar si es tipo ecuacion o tipo score la Formula.
@@ -142,14 +140,21 @@ public class Detalles extends ActionBarActivity {
         //Evaluamos si el tipo de la formula es Score.
         if (tipoDeFormula.equals("score"))
         {
-            int numeroParametros = Util.ContarParametros(cadenaCompleta);
-            String [] parametrosOriginal  = Util.ListaParametros(cadenaCompleta);
-            String [] parametrosFiltrados = Util.getParametrosDeScore(parametrosOriginal);
+            final int numeroParametros = Util.ContarParametros(cadenaCompleta);
+            final String [] parametrosOriginal  = Util.ListaParametros(cadenaCompleta);
+            final String [] parametrosFiltrados = Util.getParametrosDeScore(parametrosOriginal);
 
             //Se crea un array para ver de que tipo es cada parametro. ScoreA, ScoreB
             String [] tipoParametro = new String[numeroParametros];
             //String [] ListaScore = Util.crearListaScoreTipoA(parametrosOriginal);
-
+            //Creamos contenedores para los campos EditText y los campos RadioGroup
+            EditText ed;
+            final List<EditText> allEds = new ArrayList<EditText>();
+            //RadioGroup rd;
+            //final List< RadioGroup > allRds = new ArrayList< RadioGroup >();
+            String [] puntuacionMenor = new String[numeroParametros];
+            String [] puntuacionIntervalo = new String[numeroParametros];
+            String [] puntuacionMayor = new String[numeroParametros];
 
             for(int i=0;i< numeroParametros; i++)
             {
@@ -189,21 +194,74 @@ public class Detalles extends ActionBarActivity {
 
 
                 //Si es ScoreB
-                else if (tipoDeScore.equals("ScoreBIncompleto")  || tipoDeScore.equals("ScoreBCompleto")  )
+                else if (tipoDeScore.equals("ScoreBIncompleto")    )
                 {
                     TextView label = new TextView(this);
                     label.setText(parametrosFiltrados[i]);
-                    EditText escribe = new EditText(this);
-                    escribe.setId(i);
-                    escribe.setText(" ");
+                    ed = new EditText(this);
+                    allEds.add(ed);
+                    ed.setId(i);
+                    //Cambio el tamaño del ed porque sale demasiado grande.
+                    //ed.setHeight(2);
+                    //ed.setWidth(2);
+                    ed.setPadding(0,1,5,3);
                     lm.addView(label);
-                    lm.addView(escribe);
+                    lm.addView(ed);
+                }
+
+                else if (tipoDeScore.equals("ScoreBCompleto")  )
+                {
+                    TextView label = new TextView(this);
+                    label.setText(parametrosFiltrados[i]);
+                    ed = new EditText(this);
+                    allEds.add(ed);
+                    ed.setId(i);
+                    //Cambio el tamaño del ed porque sale demasiado grande.
+                    //ed.setHeight(2);
+                    //ed.setWidth(2);
+                    lm.addView(label);
+                    lm.addView(ed);
+
                 }
 
             }
 
+
+
             //final TextView lblEtiqueta = (TextView)findViewById(lm. );
             //String texto = lblEtiqueta.getText().toString();
+
+            //Por ahora solo voy a probar para Score B incompleto
+            final String[] valorIntroducido = new String[numeroParametros];
+            final Button botonScore = new Button(this);
+            botonScore.setText("Calcular formula");
+            lm.addView(botonScore);
+            final TextView mensaje = new TextView(this);
+            lm.addView(mensaje);
+
+            botonScore.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    //Expression expression = new Expression(ecuacion);
+                    String cadena = "";
+                    valorIntroducido[0] = allEds.get(0).getText().toString();
+                    //expression.with(parametrosFiltrados[0], valorIntroducido[0]);
+
+                    for (int i = 1; i < numeroParametros; i++) {
+                        valorIntroducido[i] = allEds.get(i).getText().toString();
+                        cadena = cadena + "aqui va el parametro" + parametrosFiltrados[i] + "aqui su valor" + valorIntroducido[i] + "y su tipo es" +Util.tipoScore(parametrosOriginal[i])+ ""   ;
+                        //expression.and(parametrosFiltrados[i], valorIntroducido[i]);
+                    }
+
+                    mensaje.setText(cadena);
+                    //BigDecimal resultadoEcuacion = expression.eval();
+                    //mensaje.setText(resultadoEcuacion.toString());
+
+                }
+            });
+
+
 
         }
         //Sino es Score tendra que ser de tipo ecuacion.
@@ -229,7 +287,7 @@ public class Detalles extends ActionBarActivity {
                 lm.addView(ed);
             }
 
-            final String[] valorVariable = new String[numeroParametros];
+            final String[] valorIntroducido = new String[numeroParametros];
             final Button botonEcuacion = new Button(this);
             botonEcuacion.setText("Calcular formula");
             lm.addView(botonEcuacion);
@@ -242,18 +300,18 @@ public class Detalles extends ActionBarActivity {
                 public void onClick(View v) {
 
                     Expression expression = new Expression(ecuacion);
-                    String cadena="";
-                    valorVariable[0] = allEds.get(0).getText().toString();
-                    expression.with(parametros[0],valorVariable[0]);
+                    String cadena = "";
+                    valorIntroducido[0] = allEds.get(0).getText().toString();
+                    expression.with(parametros[0], valorIntroducido[0]);
 
                     for (int i = 1; i < numeroParametros; i++) {
-                        valorVariable[i] = allEds.get(i).getText().toString();
-                        cadena = cadena + "aqui va el parametro"  +parametros[i]+ "aqui su valor" +  valorVariable[i] + "" ;
-                        expression.and(parametros[i], valorVariable[i]);
+                        valorIntroducido[i] = allEds.get(i).getText().toString();
+                        cadena = cadena + "aqui va el parametro" + parametros[i] + "aqui su valor" + valorIntroducido[i] + "";
+                        expression.and(parametros[i], valorIntroducido[i]);
                     }
 
                     //mensaje.setText(cadena + " Y la ecuacion original es" + ecuacion+ "");
-                    BigDecimal resultadoEcuacion  = expression.eval();
+                    BigDecimal resultadoEcuacion = expression.eval();
                     mensaje.setText(resultadoEcuacion.toString());
 
                     /*
