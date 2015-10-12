@@ -129,12 +129,6 @@ public class Detalles extends ActionBarActivity {
                 Si es B completo
                     Se obtiene la puntuacion evaluando cada una de las condiciones, dependiendo de cual cumpla obtendra una puntuacion.
 
-
-
-
-
-
-
         */
 
         //Evaluamos si el tipo de la formula es Score.
@@ -142,7 +136,10 @@ public class Detalles extends ActionBarActivity {
         {
             final int numeroParametros = Util.ContarParametros(cadenaCompleta);
             final String [] parametrosOriginal  = Util.ListaParametros(cadenaCompleta);
-            final String [] parametrosFiltrados = Util.getParametrosDeScore(parametrosOriginal);
+            final String [] parametrosScore = Util.getParametrosDeScore(parametrosOriginal);
+            final String [] listaParametros = Util.getListaParametro(cadenaCompleta);
+            final String [] listaParametrosFiltrados = new  String[numeroParametros] ;
+
 
             //Se crea un array para ver de que tipo es cada parametro. ScoreA, ScoreB
             String [] tipoParametro = new String[numeroParametros];
@@ -152,9 +149,9 @@ public class Detalles extends ActionBarActivity {
             final List<EditText> allEds = new ArrayList<EditText>();
             //RadioGroup rd;
             //final List< RadioGroup > allRds = new ArrayList< RadioGroup >();
-            String [] puntuacionMenor = new String[numeroParametros];
-            String [] puntuacionIntervalo = new String[numeroParametros];
-            String [] puntuacionMayor = new String[numeroParametros];
+            //String [] puntuacionMenor = new String[numeroParametros];
+            //String [] puntuacionIntervalo = new String[numeroParametros];
+            //String [] puntuacionMayor = new String[numeroParametros];
 
             for(int i=0;i< numeroParametros; i++)
             {
@@ -170,7 +167,7 @@ public class Detalles extends ActionBarActivity {
                 if (tipoDeScore.equals("ScoreA"))
                 {
                     TextView label = new TextView(this);
-                    label.setText("" +parametrosFiltrados[i]+ " es " +tipoDeScore+  "" );
+                    label.setText("" +parametrosScore[i]+ " es " +tipoDeScore+  "" );
                     lm.addView(label);
                     //Contamos el numero de valores que tiene ese parametro
                     numeroScores = Util.ContarScores(parametrosOriginal[i]);
@@ -187,32 +184,27 @@ public class Detalles extends ActionBarActivity {
                     }
 
                     lm.addView(grupo);
-
-
                 }
-
-
 
                 //Si es ScoreB
                 else if (tipoDeScore.equals("ScoreBIncompleto")    )
                 {
                     TextView label = new TextView(this);
-                    label.setText(parametrosFiltrados[i]);
+                    label.setText(parametrosScore[i]);
                     ed = new EditText(this);
                     allEds.add(ed);
                     ed.setId(i);
-                    //Cambio el tamaño del ed porque sale demasiado grande.
-                    //ed.setHeight(2);
-                    //ed.setWidth(2);
-                    ed.setPadding(0,1,5,3);
+                    ed.setPadding(0, 1, 5, 3);
                     lm.addView(label);
                     lm.addView(ed);
+                    listaParametrosFiltrados[i] = Util.filtrarParametro(listaParametros[i]);
+
                 }
 
                 else if (tipoDeScore.equals("ScoreBCompleto")  )
                 {
                     TextView label = new TextView(this);
-                    label.setText(parametrosFiltrados[i]);
+                    label.setText(parametrosScore[i]);
                     ed = new EditText(this);
                     allEds.add(ed);
                     ed.setId(i);
@@ -221,7 +213,8 @@ public class Detalles extends ActionBarActivity {
                     //ed.setWidth(2);
                     lm.addView(label);
                     lm.addView(ed);
-
+                    listaParametrosFiltrados[i] = Util.filtrarParametro(listaParametros[i]);
+                    listaParametrosFiltrados[i] = Util.cambiarFormatoIntervaloAParametroFiltrado(listaParametrosFiltrados[i]);
                 }
 
             }
@@ -237,6 +230,7 @@ public class Detalles extends ActionBarActivity {
             botonScore.setText("Calcular formula");
             lm.addView(botonScore);
             final TextView mensaje = new TextView(this);
+
             lm.addView(mensaje);
 
             botonScore.setOnClickListener(new View.OnClickListener() {
@@ -245,16 +239,61 @@ public class Detalles extends ActionBarActivity {
 
                     //Expression expression = new Expression(ecuacion);
                     String cadena = "";
+                    String tipoDeScore;
+                    int sumaScore =0;
                     valorIntroducido[0] = allEds.get(0).getText().toString();
                     //expression.with(parametrosFiltrados[0], valorIntroducido[0]);
 
-                    for (int i = 1; i < numeroParametros; i++) {
+                    for (int i = 0; i < numeroParametros; i++) {
                         valorIntroducido[i] = allEds.get(i).getText().toString();
-                        cadena = cadena + "aqui va el parametro" + parametrosFiltrados[i] + "aqui su valor" + valorIntroducido[i] + "y su tipo es" +Util.tipoScore(parametrosOriginal[i])+ ""   ;
+                        //cadena = cadena + "aqui va el parametro" + parametrosScore[i] + "aqui su valor" + valorIntroducido[i] + "y su tipo es" +Util.tipoScore(parametrosOriginal[i])+ ""   ;
+                        //cadena = cadena + listaParametrosFiltrados[i-1];
                         //expression.and(parametrosFiltrados[i], valorIntroducido[i]);
+
+                        tipoDeScore = Util.tipoScore(parametrosOriginal[i]);
+
+                        //Debemos recorrer todos los valores y hacer la suma de Score
+
+                        //Hay que distinguir el tipo de Score para trabajar de una forma u otra.
+                        if (tipoDeScore.equals("ScoreA"))
+                        {
+
+                        }
+
+                        else if (tipoDeScore.equals("ScoreBIncompleto")    )
+                        {
+                          //tenemos que coger la condicion y la puntuacion
+                          //Evaluar que si se cumple la condicion sumaremos el valor del score al contador
+                            String condicion;
+                            int puntuacion;
+                            condicion =   Util.getCondicion(listaParametrosFiltrados[i]);
+                            puntuacion =  Integer.parseInt(Util.getScore(listaParametrosFiltrados[i]));
+                            //cadena = cadena + "" + valorIntroducido[i]  + ""  +tipoDeScore+ "" ;
+
+                             //Ahora se debe evaluar con la condicion si debemos sumar o no el score al contador.
+                            Expression expressionScoreBIncompleto = new Expression("" + valorIntroducido[i] + "" +condicion+ "");
+                            BigDecimal resultado = expressionScoreBIncompleto.eval();
+
+
+                            //Si se cumple la condicion
+                            if (resultado.toString().equals("1") )
+                            {
+                                sumaScore = sumaScore + puntuacion;
+
+                            }
+
+
+
+                        }
+
+                        else if (tipoDeScore.equals("ScoreBCompleto")  )
+                        {
+
+                        }
+
                     }
 
-                    mensaje.setText(cadena);
+                    mensaje.setText(cadena + sumaScore);
                     //BigDecimal resultadoEcuacion = expression.eval();
                     //mensaje.setText(resultadoEcuacion.toString());
 

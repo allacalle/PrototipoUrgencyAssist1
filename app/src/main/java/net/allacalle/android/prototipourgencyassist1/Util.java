@@ -70,7 +70,15 @@ public final  class Util
 
     }
 
+    public static String [] getListaParametro (String consulta)
+    {
+        String [] listaParametros ;
+        listaParametros = consulta.split(";");
 
+        return listaParametros;
+    }
+
+/*
     //requiere una lista de Parametros
     public static String [] filtroScore (String [] listaParametros )
     {
@@ -101,7 +109,7 @@ public final  class Util
         return  parametroDeScore ;
 
     }
-
+*/
     //Esta funcion recibe una lista con los parametros perteneciente a una formula tipo Score.
     //Devuelve False para tipo Score A y devuelve True para tipo Score B.
 
@@ -155,9 +163,9 @@ public final  class Util
         return condicionPuntuacion;
     }
 
+    //Esta funcion elimina los corchetes y el nombre del parametro de un parametro de tipo Score
     public static String filtrarParametro (String Parametro)
     {
-        //Esta funcion debe eliminar los corchetes y el nombre del parametro de un parametro de tipo Score
         int posicionInicial =0;
         int posicionFinal =0;
         String parametroFiltrado;
@@ -280,11 +288,41 @@ public final  class Util
         String valorMenor = sacarValorMenorDeIntervalo(parametroFiltrado);
         String valorMayor = sacarValorMayorDeIntervalo(parametroFiltrado);
 
-        String resultado = "<= " +valorMayor+ " && " +valorMenor+ " <=" ;
-
-        return resultado;
-
+        return "<= " +valorMayor+ " && " +valorMenor+ " <=" ;
     }
+
+
+    //Para que esta funcion de un valor acertado debe ser una Formula ScoreBCompleto
+    // <valorMenor:punt,intervalo:punt,>valorMayor:punt
+    public static String cambiarFormatoIntervaloAParametroFiltrado (String parametroFiltrado )
+    {
+        String condicionConScore [] =parametroFiltrado.split(",");
+        String valorIntervalo[] = condicionConScore[1].split(":");
+        String puntuacionIntervalo = ":" + valorIntervalo[1] + "";
+        String nuevoIntervalo = crearFormatoIntervalo(parametroFiltrado);
+
+
+        return  "" +condicionConScore[0]+ "," +nuevoIntervalo+ "" + puntuacionIntervalo +  "," + condicionConScore[2] +""  ;
+    }
+
+
+    //Recibe un string con el formato condicion:score y devuelve la condicion como cadena de texto
+    public static  String getCondicion (String condicionScore)
+    {
+      String resultado [] =  condicionScore.split(":");
+
+        return  resultado[0];
+    }
+
+
+    public static  String getScore (String condicionScore)
+    {
+        String resultado [] =  condicionScore.split(":");
+
+        return  resultado[1];
+    }
+
+
 
 
 
