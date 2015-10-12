@@ -279,7 +279,6 @@ public class Detalles extends ActionBarActivity {
                             if (resultado.toString().equals("1") )
                             {
                                 sumaScore = sumaScore + puntuacion;
-
                             }
 
 
@@ -288,12 +287,53 @@ public class Detalles extends ActionBarActivity {
 
                         else if (tipoDeScore.equals("ScoreBCompleto")  )
                         {
+                            //cadena = cadena + listaParametrosFiltrados[i];
+                            //Para meter condicion menor, intervalo y mayor, indices 0,1,2
+                            String condicion [] = new String[3];
+                            //Para meter puntuacion menor, intervalo y mayor 0,1,2
+                            int puntuacion[]= new int[3];
+                            //Saco las 3 condiciones y las 3 puntuaciones del parametro que estan separados por ","
+                            String condicionPuntuacion [] = listaParametrosFiltrados[i].split(",");
+                            for(int j =0; j < 3;j++ )
+                            {
+                                condicion[j] = Util.getCondicion(condicionPuntuacion[j]);
+                                puntuacion[j] = Integer.parseInt(Util.getScore(condicionPuntuacion[j]));
+                                //cadena = cadena + condicion[j] +puntuacion[j] ;
+
+                            }
+                            Expression expressionMenor = new Expression("" + valorIntroducido[i] + "" +condicion[0]+ "");
+                            BigDecimal resultadoMenor = expressionMenor.eval();
+                            Expression expressionIntervalo = new Expression("" + valorIntroducido[i] + "" +condicion[1]+ "" +valorIntroducido[i]+ "");
+                            BigDecimal resultadoIntervalo = expressionIntervalo.eval();
+                            Expression expressionMayor = new Expression("" + valorIntroducido[i] + "" +condicion[2]+ "");
+                            BigDecimal resultadoMayor = expressionMayor.eval();
+
+
+                            //Si el valor intrucido cumple la condicion menor
+                            if (resultadoMenor.toString().equals("1") )
+                            {
+                                sumaScore = sumaScore + puntuacion[0];
+                            }
+
+                            //Si el valor intrucido cumple la condicion del intervalo
+                            else if (resultadoIntervalo.toString().equals("1") )
+                            {
+                                sumaScore = sumaScore + puntuacion[1];
+                            }
+
+
+                            //Si el valor introducido cumple la condicion mayor.
+                            else if (resultadoMayor.toString().equals("1") )
+                            {
+                                sumaScore = sumaScore + puntuacion[2];
+                            }
+
 
                         }
 
                     }
 
-                    mensaje.setText(cadena + sumaScore);
+                    mensaje.setText(cadena +sumaScore);
                     //BigDecimal resultadoEcuacion = expression.eval();
                     //mensaje.setText(resultadoEcuacion.toString());
 
