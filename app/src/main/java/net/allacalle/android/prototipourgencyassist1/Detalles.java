@@ -147,8 +147,8 @@ public class Detalles extends ActionBarActivity {
             //Creamos contenedores para los campos EditText y los campos RadioGroup
             EditText ed;
             final List<EditText> allEds = new ArrayList<EditText>();
-            //RadioGroup rd;
-            //final List< RadioGroup > allRds = new ArrayList< RadioGroup >();
+            RadioGroup rg;
+            final List< RadioGroup > allRbs = new ArrayList< RadioGroup >();
             //String [] puntuacionMenor = new String[numeroParametros];
             //String [] puntuacionIntervalo = new String[numeroParametros];
             //String [] puntuacionMayor = new String[numeroParametros];
@@ -172,18 +172,27 @@ public class Detalles extends ActionBarActivity {
                     //Contamos el numero de valores que tiene ese parametro
                     numeroScores = Util.ContarScores(parametrosOriginal[i]);
 
-                    RadioGroup grupo = new RadioGroup(this);
+                    rg = new RadioGroup(this);
                     String listaCondicionPuntuacion [] =  Util.listaPuntuacionScore(parametrosOriginal[i]);
 
                     for(int j=0;j< numeroScores; j++)
                     {
                         RadioButton radial = new RadioButton(this);
                         radial.setText(listaCondicionPuntuacion[j]);
-                        radial.setId((i + 1) * (j + 1));
-                        grupo.addView(radial);
+                        radial.setId((i + 1) * 100 +j);
+                        rg.addView(radial);
                     }
 
-                    lm.addView(grupo);
+                    //Agregamos tambien un campo a allEds por consistencia
+                    //Es decir queremos recorrer todos los datos de una pasada y para ello
+                    // se necesita que el id del campo conincida con el indice del bucle.
+                    ed = new EditText(this);
+                    allEds.add(ed);
+                    ed.setId(i);
+
+                    allRbs.add(rg);
+                    rg.setId(i);
+                    lm.addView(rg);
                 }
 
                 //Si es ScoreB
@@ -194,6 +203,13 @@ public class Detalles extends ActionBarActivity {
                     ed = new EditText(this);
                     allEds.add(ed);
                     ed.setId(i);
+                    //Agregamos tambien un campo a allRbs por consistencia en las tablas
+                    //Es decir queremos recorrer todos los datos de una pasada y para ello
+                    // se necesita que el id del campo conincida con el indice del bucle.
+                    rg = new RadioGroup(this);
+                    allRbs.add(rg);
+                    rg.setId(i);
+
                     ed.setPadding(0, 1, 5, 3);
                     lm.addView(label);
                     lm.addView(ed);
@@ -211,6 +227,13 @@ public class Detalles extends ActionBarActivity {
                     //Cambio el tamaño del ed porque sale demasiado grande.
                     //ed.setHeight(2);
                     //ed.setWidth(2);
+                    //Agregamos tambien un campo a allRbs por consistencia en las tablas
+                    //Es decir queremos recorrer todos los datos de una pasada y para ello
+                    // se necesita que el id del campo conincida con el indice del bucle.
+                    rg = new RadioGroup(this);
+                    allRbs.add(rg);
+                    rg.setId(i);
+
                     lm.addView(label);
                     lm.addView(ed);
                     listaParametrosFiltrados[i] = Util.filtrarParametro(listaParametros[i]);
@@ -224,7 +247,7 @@ public class Detalles extends ActionBarActivity {
             //final TextView lblEtiqueta = (TextView)findViewById(lm. );
             //String texto = lblEtiqueta.getText().toString();
 
-            //Por ahora solo voy a probar para Score B incompleto
+
             final String[] valorIntroducido = new String[numeroParametros];
             final Button botonScore = new Button(this);
             botonScore.setText("Calcular formula");
@@ -241,7 +264,7 @@ public class Detalles extends ActionBarActivity {
                     String cadena = "";
                     String tipoDeScore;
                     int sumaScore =0;
-                    valorIntroducido[0] = allEds.get(0).getText().toString();
+                    //valorIntroducido[0] = allEds.get(0).getText().toString();
                     //expression.with(parametrosFiltrados[0], valorIntroducido[0]);
 
                     for (int i = 0; i < numeroParametros; i++) {
@@ -257,6 +280,12 @@ public class Detalles extends ActionBarActivity {
                         //Hay que distinguir el tipo de Score para trabajar de una forma u otra.
                         if (tipoDeScore.equals("ScoreA"))
                         {
+                            int selectedId =  allRbs.get(i).getCheckedRadioButtonId();
+                            RadioButton rBtn = (RadioButton) findViewById(selectedId);
+                            String radioText = rBtn.getText().toString();
+                            int puntuacion;
+                            puntuacion =  Integer.parseInt(Util.getScore(radioText));
+                            sumaScore = sumaScore + puntuacion;
 
                         }
 
