@@ -91,15 +91,15 @@ public class MainActivity extends ActionBarActivity {
                 //db.execSQL("INSERT INTO Formulas (parametrosFormula, tipoFormula, nombreCompleto, abreviatura) VALUES('hola','hola','hola','hola') ");
 
 
-                txtNombre = (TextView)findViewById(R.id.TxtNombre);
-                txtNombre.setText("He insertado 3 campos en la base de datos");
+                //txtNombre = (TextView)findViewById(R.id.TxtNombre);
+                //txtNombre.setText("He insertado 3 campos en la base de datos");
 
             }
 
             else
             {
-                txtNombre = (TextView)findViewById(R.id.TxtNombre);
-                txtNombre.setText("No he insertado nada porque no hacia falta");
+                //txtNombre = (TextView)findViewById(R.id.TxtNombre);
+                //txtNombre.setText("No he insertado nada porque no hacia falta");
             }
 
 
