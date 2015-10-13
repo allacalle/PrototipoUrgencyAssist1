@@ -18,7 +18,7 @@ import java.math.BigDecimal;
 
 
 public class MainActivity extends ActionBarActivity {
-    private TextView txtNombre;
+   private TextView txtNombre;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,8 +68,8 @@ public class MainActivity extends ActionBarActivity {
             c.moveToFirst();
             String nCampos = c.getString(0);
             //Vamos a ponerle a un nombre el resultado de un select
-            //txtNombre = (TextView)findViewById(R.id.TxtNombre);
-            //txtNombre.setText(nCampos);
+            txtNombre = (TextView)findViewById(R.id.TxtNombre);
+            txtNombre.setText(nCampos);
 
             //Comprobamos si la tabla esta vacia. Insertamos solo el listado de formulas
             // en una tabla vacia.
@@ -91,15 +91,15 @@ public class MainActivity extends ActionBarActivity {
                 //db.execSQL("INSERT INTO Formulas (parametrosFormula, tipoFormula, nombreCompleto, abreviatura) VALUES('hola','hola','hola','hola') ");
 
 
-                //txtNombre = (TextView)findViewById(R.id.TxtNombre);
-                //txtNombre.setText("He insertado 3 campos en la base de datos");
+                txtNombre = (TextView)findViewById(R.id.TxtNombre);
+                txtNombre.setText("Se ha creado la base de datos");
 
             }
 
             else
             {
-                //txtNombre = (TextView)findViewById(R.id.TxtNombre);
-                //txtNombre.setText("No he insertado nada porque no hacia falta");
+                 txtNombre = (TextView)findViewById(R.id.TxtNombre);
+                 txtNombre.setText("La base de datos sigue igual");
             }
 
 
@@ -122,10 +122,10 @@ public class MainActivity extends ActionBarActivity {
 
             //botonazo.setText(" Hay  " + numeroFormulas + " formulas ");
             //botonazo.setText(Util.tipoScore("Alb"));
-            String intervalo = Util.cambiarFormatoIntervaloAParametroFiltrado ("<2.8:3,intervalo:2,>3.5:1");
-            botonazo.setText( intervalo );
+            //String intervalo = Util.cambiarFormatoIntervaloAParametroFiltrado ("<2.8:3,intervalo:2,>3.5:1");
+            //botonazo.setText( intervalo );
 
-            lm.addView(botonazo);
+            //lm.addView(botonazo);
 
             for(int i=0;i< numeroFormulas; i++)
             {
