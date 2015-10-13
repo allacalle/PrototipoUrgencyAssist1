@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -167,7 +168,7 @@ public class Detalles extends ActionBarActivity {
                 if (tipoDeScore.equals("ScoreA"))
                 {
                     TextView label = new TextView(this);
-                    label.setText("" +parametrosScore[i]+ " es " +tipoDeScore+  "" );
+                    label.setText("" +parametrosScore[i]+  "" );
                     lm.addView(label);
                     //Contamos el numero de valores que tiene ese parametro
                     numeroScores = Util.ContarScores(parametrosOriginal[i]);
@@ -202,6 +203,8 @@ public class Detalles extends ActionBarActivity {
                     label.setText(parametrosScore[i]);
                     ed = new EditText(this);
                     allEds.add(ed);
+                    //Mostrar solo teclado numerico
+                    ed.setInputType(InputType.TYPE_CLASS_PHONE);
                     ed.setId(i);
                     //Agregamos tambien un campo a allRbs por consistencia en las tablas
                     //Es decir queremos recorrer todos los datos de una pasada y para ello
@@ -223,6 +226,8 @@ public class Detalles extends ActionBarActivity {
                     label.setText(parametrosScore[i]);
                     ed = new EditText(this);
                     allEds.add(ed);
+                    //Mostrar solo teclado numerico
+                    ed.setInputType(InputType.TYPE_CLASS_PHONE);
                     ed.setId(i);
                     //Cambio el tamaño del ed porque sale demasiado grande.
                     //ed.setHeight(2);
@@ -239,23 +244,17 @@ public class Detalles extends ActionBarActivity {
                     listaParametrosFiltrados[i] = Util.filtrarParametro(listaParametros[i]);
                     listaParametrosFiltrados[i] = Util.cambiarFormatoIntervaloAParametroFiltrado(listaParametrosFiltrados[i]);
                 }
-
             }
-
-
 
             //final TextView lblEtiqueta = (TextView)findViewById(lm. );
             //String texto = lblEtiqueta.getText().toString();
-
 
             final String[] valorIntroducido = new String[numeroParametros];
             final Button botonScore = new Button(this);
             botonScore.setText("Calcular formula");
             lm.addView(botonScore);
             final TextView mensaje = new TextView(this);
-
             lm.addView(mensaje);
-
             botonScore.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -286,7 +285,6 @@ public class Detalles extends ActionBarActivity {
                             int puntuacion;
                             puntuacion =  Integer.parseInt(Util.getScore(radioText));
                             sumaScore = sumaScore + puntuacion;
-
                         }
 
                         else if (tipoDeScore.equals("ScoreBIncompleto")    )
@@ -365,17 +363,13 @@ public class Detalles extends ActionBarActivity {
                     mensaje.setText(cadena +sumaScore);
                     //BigDecimal resultadoEcuacion = expression.eval();
                     //mensaje.setText(resultadoEcuacion.toString());
-
                 }
             });
-
-
 
         }
         //Sino es Score tendra que ser de tipo ecuacion.
         else
         {
-
             //Creamos un array de EditText utilizando List y ArrayList
             EditText ed;
             final List<EditText> allEds = new ArrayList<EditText>();
@@ -391,6 +385,8 @@ public class Detalles extends ActionBarActivity {
                 ed = new EditText(this);
                 allEds.add(ed);
                 ed.setId(i);
+                //Mostrar solo teclado numerico
+                ed.setInputType(InputType.TYPE_CLASS_PHONE);
                 lm.addView(label);
                 lm.addView(ed);
             }
@@ -422,15 +418,6 @@ public class Detalles extends ActionBarActivity {
                     BigDecimal resultadoEcuacion = expression.eval();
                     mensaje.setText(resultadoEcuacion.toString());
 
-                    /*
-                    String ecuacionprueba ="FC*( (edad/10)^2)/PS" ;
-                    Expression expression = new Expression(ecuacionprueba);
-                    expression.with("FC", "4");
-                    expression.and("edad", "10");
-                    expression.and("PS", "4");
-                    BigDecimal resultado = expression.eval();
-                    mensaje.setText(resultado.toString());
-                    */
                 }
             });
 
