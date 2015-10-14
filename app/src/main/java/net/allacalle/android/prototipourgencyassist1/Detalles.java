@@ -41,6 +41,7 @@ public class Detalles extends ActionBarActivity {
         //txtDetalles.setText("Elegiste la ocpcion " + bundle.getString("NOMBRE"));
         final String valorRecibido = bundle.getString("NOMBRE") ;
 
+
         //creamos el layout dinamico como pros!
         final LinearLayout lm = (LinearLayout) findViewById(R.id.LytContenedorDetalles);
 
@@ -259,110 +260,127 @@ public class Detalles extends ActionBarActivity {
                 @Override
                 public void onClick(View v) {
 
-                    //Expression expression = new Expression(ecuacion);
-                    String cadena = "";
+                    boolean valoresEnBlanco = false;
                     String tipoDeScore;
-                    int sumaScore =0;
-                    //valorIntroducido[0] = allEds.get(0).getText().toString();
-                    //expression.with(parametrosFiltrados[0], valorIntroducido[0]);
-
+                    String cadenaEvaluar1;
+                    int idRadioButton;
                     for (int i = 0; i < numeroParametros; i++) {
-                        valorIntroducido[i] = allEds.get(i).getText().toString();
-                        //cadena = cadena + "aqui va el parametro" + parametrosScore[i] + "aqui su valor" + valorIntroducido[i] + "y su tipo es" +Util.tipoScore(parametrosOriginal[i])+ ""   ;
-                        //cadena = cadena + listaParametrosFiltrados[i-1];
-                        //expression.and(parametrosFiltrados[i], valorIntroducido[i]);
-
+                        //En cada iteracion miramos el tipo de parametro
                         tipoDeScore = Util.tipoScore(parametrosOriginal[i]);
 
-                        //Debemos recorrer todos los valores y hacer la suma de Score
-
-                        //Hay que distinguir el tipo de Score para trabajar de una forma u otra.
-                        if (tipoDeScore.equals("ScoreA"))
-                        {
-                            int selectedId =  allRbs.get(i).getCheckedRadioButtonId();
-                            RadioButton rBtn = (RadioButton) findViewById(selectedId);
-                            String radioText = rBtn.getText().toString();
-                            int puntuacion;
-                            puntuacion =  Integer.parseInt(Util.getScore(radioText));
-                            sumaScore = sumaScore + puntuacion;
+                        //Si es tipo de ScoreA
+                        if (tipoDeScore.equals("ScoreA")) {
+                            //Vemos la id de la opcion seleccionada, si es -1 es que no hay ninguna.
+                            idRadioButton = allRbs.get(i).getCheckedRadioButtonId();
+                            if( idRadioButton == -1)
+                                valoresEnBlanco = true;
                         }
-
-                        else if (tipoDeScore.equals("ScoreBIncompleto")    )
+                        else
                         {
-                          //tenemos que coger la condicion y la puntuacion
-                          //Evaluar que si se cumple la condicion sumaremos el valor del score al contador
-                            String condicion;
-                            int puntuacion;
-                            condicion =   Util.getCondicion(listaParametrosFiltrados[i]);
-                            puntuacion =  Integer.parseInt(Util.getScore(listaParametrosFiltrados[i]));
-                            //cadena = cadena + "" + valorIntroducido[i]  + ""  +tipoDeScore+ "" ;
-
-                             //Ahora se debe evaluar con la condicion si debemos sumar o no el score al contador.
-                            Expression expressionScoreBIncompleto = new Expression("" + valorIntroducido[i] + "" +condicion+ "");
-                            BigDecimal resultado = expressionScoreBIncompleto.eval();
-
-
-                            //Si se cumple la condicion
-                            if (resultado.toString().equals("1") )
-                            {
-                                sumaScore = sumaScore + puntuacion;
-                            }
-
-
-
-                        }
-
-                        else if (tipoDeScore.equals("ScoreBCompleto")  )
-                        {
-                            //cadena = cadena + listaParametrosFiltrados[i];
-                            //Para meter condicion menor, intervalo y mayor, indices 0,1,2
-                            String condicion [] = new String[3];
-                            //Para meter puntuacion menor, intervalo y mayor 0,1,2
-                            int puntuacion[]= new int[3];
-                            //Saco las 3 condiciones y las 3 puntuaciones del parametro que estan separados por ","
-                            String condicionPuntuacion [] = listaParametrosFiltrados[i].split(",");
-                            for(int j =0; j < 3;j++ )
-                            {
-                                condicion[j] = Util.getCondicion(condicionPuntuacion[j]);
-                                puntuacion[j] = Integer.parseInt(Util.getScore(condicionPuntuacion[j]));
-                                //cadena = cadena + condicion[j] +puntuacion[j] ;
-
-                            }
-                            Expression expressionMenor = new Expression("" + valorIntroducido[i] + "" +condicion[0]+ "");
-                            BigDecimal resultadoMenor = expressionMenor.eval();
-                            Expression expressionIntervalo = new Expression("" + valorIntroducido[i] + "" +condicion[1]+ "" +valorIntroducido[i]+ "");
-                            BigDecimal resultadoIntervalo = expressionIntervalo.eval();
-                            Expression expressionMayor = new Expression("" + valorIntroducido[i] + "" +condicion[2]+ "");
-                            BigDecimal resultadoMayor = expressionMayor.eval();
-
-
-                            //Si el valor intrucido cumple la condicion menor
-                            if (resultadoMenor.toString().equals("1") )
-                            {
-                                sumaScore = sumaScore + puntuacion[0];
-                            }
-
-                            //Si el valor intrucido cumple la condicion del intervalo
-                            else if (resultadoIntervalo.toString().equals("1") )
-                            {
-                                sumaScore = sumaScore + puntuacion[1];
-                            }
-
-
-                            //Si el valor introducido cumple la condicion mayor.
-                            else if (resultadoMayor.toString().equals("1") )
-                            {
-                                sumaScore = sumaScore + puntuacion[2];
-                            }
-
-
+                            //Vemos si la caja de texto esta vacia
+                            cadenaEvaluar1 = allEds.get(i).getText().toString();
+                            if (cadenaEvaluar1.equals(""))
+                                valoresEnBlanco = true;
                         }
 
                     }
 
-                    mensaje.setText(cadena +sumaScore);
-                    //BigDecimal resultadoEcuacion = expression.eval();
-                    //mensaje.setText(resultadoEcuacion.toString());
+                    //Si el formulario tiene valores sin rellenar.
+                    if (valoresEnBlanco) {
+                        mensaje.setText("No es posible calcular la formula con valores en blanco");
+                    } else {
+
+                        //Expression expression = new Expression(ecuacion);
+                        String cadena = "";
+                        int sumaScore = 0;
+                        //valorIntroducido[0] = allEds.get(0).getText().toString();
+                        //expression.with(parametrosFiltrados[0], valorIntroducido[0]);
+
+                        for (int i = 0; i < numeroParametros; i++) {
+                            valorIntroducido[i] = allEds.get(i).getText().toString();
+                            //cadena = cadena + "aqui va el parametro" + parametrosScore[i] + "aqui su valor" + valorIntroducido[i] + "y su tipo es" +Util.tipoScore(parametrosOriginal[i])+ ""   ;
+                            //cadena = cadena + listaParametrosFiltrados[i-1];
+                            //expression.and(parametrosFiltrados[i], valorIntroducido[i]);
+
+                            tipoDeScore = Util.tipoScore(parametrosOriginal[i]);
+
+                            //Debemos recorrer todos los valores y hacer la suma de Score
+
+                            //Hay que distinguir el tipo de Score para trabajar de una forma u otra.
+                            if (tipoDeScore.equals("ScoreA")) {
+                                int selectedId = allRbs.get(i).getCheckedRadioButtonId();
+                                RadioButton rBtn = (RadioButton) findViewById(selectedId);
+                                String radioText = rBtn.getText().toString();
+                                int puntuacion;
+                                puntuacion = Integer.parseInt(Util.getScore(radioText));
+                                sumaScore = sumaScore + puntuacion;
+                            } else if (tipoDeScore.equals("ScoreBIncompleto")) {
+                                //tenemos que coger la condicion y la puntuacion
+                                //Evaluar que si se cumple la condicion sumaremos el valor del score al contador
+                                String condicion;
+                                int puntuacion;
+                                condicion = Util.getCondicion(listaParametrosFiltrados[i]);
+                                puntuacion = Integer.parseInt(Util.getScore(listaParametrosFiltrados[i]));
+                                //cadena = cadena + "" + valorIntroducido[i]  + ""  +tipoDeScore+ "" ;
+
+                                //Ahora se debe evaluar con la condicion si debemos sumar o no el score al contador.
+                                Expression expressionScoreBIncompleto = new Expression("" + valorIntroducido[i] + "" + condicion + "");
+                                BigDecimal resultado = expressionScoreBIncompleto.eval();
+
+
+                                //Si se cumple la condicion
+                                if (resultado.toString().equals("1")) {
+                                    sumaScore = sumaScore + puntuacion;
+                                }
+
+
+                            } else if (tipoDeScore.equals("ScoreBCompleto")) {
+                                //cadena = cadena + listaParametrosFiltrados[i];
+                                //Para meter condicion menor, intervalo y mayor, indices 0,1,2
+                                String condicion[] = new String[3];
+                                //Para meter puntuacion menor, intervalo y mayor 0,1,2
+                                int puntuacion[] = new int[3];
+                                //Saco las 3 condiciones y las 3 puntuaciones del parametro que estan separados por ","
+                                String condicionPuntuacion[] = listaParametrosFiltrados[i].split(",");
+                                for (int j = 0; j < 3; j++) {
+                                    condicion[j] = Util.getCondicion(condicionPuntuacion[j]);
+                                    puntuacion[j] = Integer.parseInt(Util.getScore(condicionPuntuacion[j]));
+                                    //cadena = cadena + condicion[j] +puntuacion[j] ;
+
+                                }
+                                Expression expressionMenor = new Expression("" + valorIntroducido[i] + "" + condicion[0] + "");
+                                BigDecimal resultadoMenor = expressionMenor.eval();
+                                Expression expressionIntervalo = new Expression("" + valorIntroducido[i] + "" + condicion[1] + "" + valorIntroducido[i] + "");
+                                BigDecimal resultadoIntervalo = expressionIntervalo.eval();
+                                Expression expressionMayor = new Expression("" + valorIntroducido[i] + "" + condicion[2] + "");
+                                BigDecimal resultadoMayor = expressionMayor.eval();
+
+
+                                //Si el valor intrucido cumple la condicion menor
+                                if (resultadoMenor.toString().equals("1")) {
+                                    sumaScore = sumaScore + puntuacion[0];
+                                }
+
+                                //Si el valor intrucido cumple la condicion del intervalo
+                                else if (resultadoIntervalo.toString().equals("1")) {
+                                    sumaScore = sumaScore + puntuacion[1];
+                                }
+
+
+                                //Si el valor introducido cumple la condicion mayor.
+                                else if (resultadoMayor.toString().equals("1")) {
+                                    sumaScore = sumaScore + puntuacion[2];
+                                }
+
+
+                            }
+
+                        }
+
+                        mensaje.setText(cadena + sumaScore);
+                        //BigDecimal resultadoEcuacion = expression.eval();
+                        //mensaje.setText(resultadoEcuacion.toString());
+                    }
                 }
             });
 
@@ -403,21 +421,36 @@ public class Detalles extends ActionBarActivity {
                 @Override
                 public void onClick(View v) {
 
-                    Expression expression = new Expression(ecuacion);
-                    String cadena = "";
-                    valorIntroducido[0] = allEds.get(0).getText().toString();
-                    expression.with(parametros[0], valorIntroducido[0]);
-
-                    for (int i = 1; i < numeroParametros; i++) {
-                        valorIntroducido[i] = allEds.get(i).getText().toString();
-                        cadena = cadena + "aqui va el parametro" + parametros[i] + "aqui su valor" + valorIntroducido[i] + "";
-                        expression.and(parametros[i], valorIntroducido[i]);
+                    //Primero vamos a comprobar que no se han dejado valores en blanco en el formulario
+                    boolean valoresEnBlanco = false;
+                    String cadenaEvaluar;
+                    for (int i = 0; i < numeroParametros; i++) {
+                        cadenaEvaluar = allEds.get(i).getText().toString();
+                        if(cadenaEvaluar.equals(""))
+                            valoresEnBlanco = true;
                     }
 
-                    //mensaje.setText(cadena + " Y la ecuacion original es" + ecuacion+ "");
-                    BigDecimal resultadoEcuacion = expression.eval();
-                    mensaje.setText(resultadoEcuacion.toString());
+                    //Si el formulario tiene valores sin rellenar.
+                    if (valoresEnBlanco)
+                    {
+                        mensaje.setText("No es posible calcular la formula con valores en blanco");
+                    }
+                    else {
+                        Expression expression = new Expression(ecuacion);
+                        String cadena = "";
+                        valorIntroducido[0] = allEds.get(0).getText().toString();
+                        expression.with(parametros[0], valorIntroducido[0]);
 
+                        for (int i = 1; i < numeroParametros; i++) {
+                            valorIntroducido[i] = allEds.get(i).getText().toString();
+                            //cadena = cadena + "aqui va el parametro" + parametros[i] + "aqui su valor" + valorIntroducido[i] + "";
+                            expression.and(parametros[i], valorIntroducido[i]);
+                        }
+
+                        //mensaje.setText(cadena + " Y la ecuacion original es" + ecuacion+ "");
+                        BigDecimal resultadoEcuacion = expression.eval();
+                        mensaje.setText(resultadoEcuacion.toString());
+                    }
                 }
             });
 
