@@ -18,7 +18,7 @@ import java.math.BigDecimal;
 
 
 public class MainActivity extends ActionBarActivity {
-   private TextView txtNombre;
+   //private TextView txtNombre;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,34 +42,12 @@ public class MainActivity extends ActionBarActivity {
 
         if(db != null)
         {
-            //Insertamos 5 usuarios de ejemplo
-            /*
-            for(int i=1; i<=5; i++)
-            {
-                //Generamos los datos
-                int codigo = i;
-                String nombre = "Usuario" + i;
-
-                //Insertamos los datos en la tabla Usuarios
-                db.execSQL("INSERT INTO Prueba (codigo, nombre) " +
-                        "VALUES (" + codigo + ", '" + nombre +"')");
-            }
-
-            //Cerramos la base de datos
-            */
-
-
-            //Asi le ponemos el nombre a un campo
-            //txtNombre = (TextView)findViewById(R.id.TxtNombre);
-            //txtNombre.setText("Hola caracola ");
-
-
             Cursor c = db.rawQuery(" SELECT  COUNT(*) FROM Formulas  ", null);
             c.moveToFirst();
             String nCampos = c.getString(0);
             //Vamos a ponerle a un nombre el resultado de un select
-            txtNombre = (TextView)findViewById(R.id.TxtNombre);
-            txtNombre.setText(nCampos);
+            //txtNombre = (TextView)findViewById(R.id.TxtNombre);
+            //txtNombre.setText(nCampos);
 
             //Comprobamos si la tabla esta vacia. Insertamos solo el listado de formulas
             // en una tabla vacia.
@@ -89,7 +67,7 @@ public class MainActivity extends ActionBarActivity {
                 db.execSQL("INSERT INTO Formulas (parametrosFormula,tipoFormula,nombreCompleto,abreviatura)  VALUES ('Cancer[si:1,no:0];En cama/cirugia[si:1,no:0];edema en pantorrilla[si:1,no:0];venas superficiales[si:1,no:0];dolor[si:1,no:0];godete positivo[si:1,no:0];paralisis[si:1,no:0];TVP previa[si:1,no:0];Diagnostico alternartivo[si:-2,no:0]','score','Wells Score para Trombosis Venosa Profunda','Wells Score TVP');");
                 db.execSQL("INSERT INTO Formulas (parametrosFormula,tipoFormula,nombreCompleto,abreviatura,ecuacion)  VALUES ('BUN;CrS','ecuacion','BUN:Creatinina(S)relacion','BUN','BUN/CrS');");
                 db.execSQL("INSERT INTO Formulas (parametrosFormula,tipoFormula,nombreCompleto,abreviatura,ecuacion)  VALUES ('CrU;volU;CrS','ecuacion','Creatinina Depuracion','ClCr','(CrU*volU )/CrS');");
-                db.execSQL("INSERT INTO Formulas (parametrosFormula,tipoFormula,nombreCompleto,abreviatura,ecuacion)  VALUES ('edad;sexo;peso;CrS','ecuacion','Filtracion Glomerural P (Cockcrof)','FGP','((140-edad)*peso)(72*CrS)');");
+                db.execSQL("INSERT INTO Formulas (parametrosFormula,tipoFormula,nombreCompleto,abreviatura,ecuacion)  VALUES ('edad;peso;CrS','ecuacion','Filtracion Glomerural P (Cockcrof)','FGP','((140-edad)*peso)(72*CrS)');");
                 db.execSQL("INSERT INTO Formulas (parametrosFormula,tipoFormula,nombreCompleto,abreviatura,ecuacion)  VALUES ('H2O;peso;Na','ecuacion','Agua libre, exceso','H2Oxs','H2O*peso*(1- Na/140)');");
                 db.execSQL("INSERT INTO Formulas (parametrosFormula,tipoFormula,nombreCompleto,abreviatura,ecuacion)  VALUES ('H2O;peso;Na','ecuacion','Agua corporal,deficit','H2Odef','H2O*peso*(Na/140 -1)');");
                 db.execSQL("INSERT INTO Formulas (parametrosFormula,tipoFormula,nombreCompleto,abreviatura,ecuacion)  VALUES ('peso;ClVd;Cld;Clm','ecuacion','Cloro,deficit','Cldef', ' peso * ClVd (Cld  - Clm ) ');");
@@ -112,23 +90,23 @@ public class MainActivity extends ActionBarActivity {
                 //db.execSQL("INSERT INTO Formulas (parametrosFormula, tipoFormula, nombreCompleto, abreviatura) VALUES('hola','hola','hola','hola') ");
 
 
-                txtNombre = (TextView)findViewById(R.id.TxtNombre);
-                txtNombre.setText("Se ha creado la base de datos");
+                //txtNombre = (TextView)findViewById(R.id.TxtNombre);
+                //txtNombre.setText("Se ha creado la base de datos");
 
             }
-
+ /*
             else
             {
                  txtNombre = (TextView)findViewById(R.id.TxtNombre);
                  txtNombre.setText("La base de datos sigue igual");
             }
-
+*/
 
 
 
             //Leemos las formulas insertadas en la base de datos y cogemos las abreviaturas.
             Cursor abreviatura = db.rawQuery(" SELECT  abreviatura FROM Formulas  ", null);
-            Button botonazo = new Button(this);
+            //Button botonazo = new Button(this);
             int numeroFormulas;
             numeroFormulas = abreviatura.getCount();
             abreviatura.moveToFirst();
@@ -136,17 +114,6 @@ public class MainActivity extends ActionBarActivity {
 
 
             final String Nombreabreviatura = abreviatura.getString(0);
-            //Expression expression = new Expression("4 <= 5  &&  3 <= 4 ");
-            //Utilizar esta expresion para convertir intervalo (1,4) a  X <= 4 && 1 <= X donde X es el valor del parametro actual.
-            //BigDecimal resultado;
-            //resultado = expression.eval();
-
-            //botonazo.setText(" Hay  " + numeroFormulas + " formulas ");
-            //botonazo.setText(Util.tipoScore("Alb"));
-            //String intervalo = Util.cambiarFormatoIntervaloAParametroFiltrado ("<2.8:3,intervalo:2,>3.5:1");
-            //botonazo.setText( intervalo );
-
-            //lm.addView(botonazo);
 
             for(int i=0;i< numeroFormulas; i++)
             {

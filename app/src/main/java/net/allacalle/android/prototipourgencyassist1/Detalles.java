@@ -26,6 +26,8 @@ public class Detalles extends ActionBarActivity {
 
     private TextView txtDetalles;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,16 +46,6 @@ public class Detalles extends ActionBarActivity {
 
         //creamos el layout dinamico como pros!
         final LinearLayout lm = (LinearLayout) findViewById(R.id.LytContenedorDetalles);
-
-        // create the layout params that will be used to define how your
-        // button will be displayed
-        // LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-        //LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-
-
-        // Create LinearLayout
-        //LinearLayout l1 = new LinearLayout(this);
-        //l1.setOrientation(LinearLayout.HORIZONTAL);
 
         String cadenaCompleta ="";
         //String tipoDeFormula = "";
@@ -77,14 +69,6 @@ public class Detalles extends ActionBarActivity {
 
         //Obtenemos la ecuacion de esa formula si la tiene sino simplemente obtendra null
         final String ecuacion = c.getString(2);
-
-
-        //Comprobacion de que coje la lista de parametros y el tipo de formula
-        //TextView caja = new TextView(this);
-        //caja.setText(" Esta es la cadena  "+ cadenaCompleta+ " Y su formula es de tipo"  + tipoDeFormula+" "  );
-        //lm.addView(caja);
-
-
 
         /*
 
@@ -144,7 +128,7 @@ public class Detalles extends ActionBarActivity {
 
 
             //Se crea un array para ver de que tipo es cada parametro. ScoreA, ScoreB
-            String [] tipoParametro = new String[numeroParametros];
+            final String [] tipoParametro = new String[numeroParametros];
             //String [] ListaScore = Util.crearListaScoreTipoA(parametrosOriginal);
             //Creamos contenedores para los campos EditText y los campos RadioGroup
             EditText ed;
@@ -180,8 +164,8 @@ public class Detalles extends ActionBarActivity {
                     for(int j=0;j< numeroScores; j++)
                     {
                         RadioButton radial = new RadioButton(this);
-                        radial.setText(listaCondicionPuntuacion[j]);
-                        radial.setId((i + 1) * 100 +j);
+                        radial.setText(  Util.getCondicion(listaCondicionPuntuacion[j]));
+                        radial.setId((i + 1)*100 +j);
                         rg.addView(radial);
                     }
 
@@ -261,15 +245,15 @@ public class Detalles extends ActionBarActivity {
                 public void onClick(View v) {
 
                     boolean valoresEnBlanco = false;
-                    String tipoDeScore;
+                    //String tipoDeScore;
                     String cadenaEvaluar1;
                     int idRadioButton;
                     for (int i = 0; i < numeroParametros; i++) {
                         //En cada iteracion miramos el tipo de parametro
-                        tipoDeScore = Util.tipoScore(parametrosOriginal[i]);
+                        //tipoDeScore = Util.tipoScore(parametrosOriginal[i]);
 
                         //Si es tipo de ScoreA
-                        if (tipoDeScore.equals("ScoreA")) {
+                        if (tipoParametro[i].equals("ScoreA")) {
                             //Vemos la id de la opcion seleccionada, si es -1 es que no hay ninguna.
                             idRadioButton = allRbs.get(i).getCheckedRadioButtonId();
                             if( idRadioButton == -1)
@@ -288,7 +272,9 @@ public class Detalles extends ActionBarActivity {
                     //Si el formulario tiene valores sin rellenar.
                     if (valoresEnBlanco) {
                         mensaje.setText("No es posible calcular la formula con valores en blanco");
-                    } else {
+                    }
+                    else
+                    {
 
                         //Expression expression = new Expression(ecuacion);
                         String cadena = "";
@@ -302,19 +288,38 @@ public class Detalles extends ActionBarActivity {
                             //cadena = cadena + listaParametrosFiltrados[i-1];
                             //expression.and(parametrosFiltrados[i], valorIntroducido[i]);
 
-                            tipoDeScore = Util.tipoScore(parametrosOriginal[i]);
-
                             //Debemos recorrer todos los valores y hacer la suma de Score
 
                             //Hay que distinguir el tipo de Score para trabajar de una forma u otra.
-                            if (tipoDeScore.equals("ScoreA")) {
+                            if (tipoParametro[i].equals("ScoreA")) {
                                 int selectedId = allRbs.get(i).getCheckedRadioButtonId();
                                 RadioButton rBtn = (RadioButton) findViewById(selectedId);
-                                String radioText = rBtn.getText().toString();
+
+                                //Obtengo el grupo y al boton al que pertenece
+
+                                //Divido el numero del id entre 100. Sacando un numero como 1.07
+                                double numeroDouble =  selectedId /100.0;
+
+                                //Saco la parte entera que pertenece a la id del grupo y la parte decimal que identifica al boton
+                                int parteEntera =  (int) numeroDouble;
+                                double aux =   numeroDouble - parteEntera ;
+                                aux = aux*100;
+                                int parteDecimal = (int) aux;
+                                int indiceGrupo = parteEntera -1;
+                                int indiceBoton = parteDecimal;
+
+                                //Saca un array de String con todas las opciones de los botones y sus puntuaciones tomando como indice mi boton
+                                 String listaBotones [] = Util.listaPuntuacionScore(parametrosOriginal[indiceGrupo]);
+                                 String cadenaArecuperar = listaBotones[indiceBoton];
+
+                                //String radioText = rBtn.getText().toString();
+                                //radioText = Util.getScore(radioText);
+
                                 int puntuacion;
-                                puntuacion = Integer.parseInt(Util.getScore(radioText));
+                                puntuacion = Integer.parseInt(Util.getScore(cadenaArecuperar));
+                                //puntuacion = Integer.parseInt(radioText);
                                 sumaScore = sumaScore + puntuacion;
-                            } else if (tipoDeScore.equals("ScoreBIncompleto")) {
+                            } else if (tipoParametro[i].equals("ScoreBIncompleto")) {
                                 //tenemos que coger la condicion y la puntuacion
                                 //Evaluar que si se cumple la condicion sumaremos el valor del score al contador
                                 String condicion;
@@ -334,7 +339,7 @@ public class Detalles extends ActionBarActivity {
                                 }
 
 
-                            } else if (tipoDeScore.equals("ScoreBCompleto")) {
+                            } else if (tipoParametro[i].equals("ScoreBCompleto")) {
                                 //cadena = cadena + listaParametrosFiltrados[i];
                                 //Para meter condicion menor, intervalo y mayor, indices 0,1,2
                                 String condicion[] = new String[3];
@@ -453,10 +458,7 @@ public class Detalles extends ActionBarActivity {
                     }
                 }
             });
-
-
         }
-
 
         db.close();
         c.close();
