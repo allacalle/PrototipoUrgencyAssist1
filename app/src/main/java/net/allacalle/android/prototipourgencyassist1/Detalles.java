@@ -24,7 +24,7 @@ import java.util.List;
 
 public class Detalles extends ActionBarActivity {
 
-    private TextView txtDetalles;
+    //private TextView txtDetalles;
 
 
 
@@ -34,7 +34,7 @@ public class Detalles extends ActionBarActivity {
         setContentView(R.layout.activity_detalles);
 
         //Localizar los controles
-        txtDetalles = (TextView)findViewById(R.id.TxtDetalles);
+        //txtDetalles = (TextView)findViewById(R.id.TxtDetalles);
 
         //Recuperamos la información pasada en el intent
         Bundle bundle = this.getIntent().getExtras();
@@ -43,12 +43,21 @@ public class Detalles extends ActionBarActivity {
         //txtDetalles.setText("Elegiste la ocpcion " + bundle.getString("NOMBRE"));
         final String valorRecibido = bundle.getString("NOMBRE") ;
 
-
         //creamos el layout dinamico como pros!
         final LinearLayout lm = (LinearLayout) findViewById(R.id.LytContenedorDetalles);
 
+        TextView titulo = new TextView(this);
+        titulo.setText(valorRecibido);
+        TextView titulo2 = new TextView(this);
+        titulo2.setText("");
+        lm.addView(titulo);
+        lm.addView(titulo2);
+
+
+
         String cadenaCompleta ="";
         //String tipoDeFormula = "";
+
 
         // Para obtener el tipo de cada formula deberiamos movernos al cursor de cada formula y obtener el getString(1);
 
